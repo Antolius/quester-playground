@@ -5,23 +5,23 @@ package com.example.josip.model;
  */
 public class Point {
 
-    private double latiture;
+    private double latitude;
     private double longitude;
 
     public Point() {
     }
 
-    public Point(double latiture, double longitude) {
-        this.latiture = latiture;
+    public Point(double latitude, double longitude) {
+        this.latitude = latitude;
         this.longitude = longitude;
     }
 
-    public double getLatiture() {
-        return latiture;
+    public double getLatitude() {
+        return latitude;
     }
 
-    public void setLatiture(double latiture) {
-        this.latiture = latiture;
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
     }
 
     public double getLongitude() {

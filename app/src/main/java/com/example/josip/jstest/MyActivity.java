@@ -1,14 +1,18 @@
 package com.example.josip.jstest;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.os.Messenger;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.webkit.ValueCallback;
-import android.webkit.WebView;
+import android.view.View;
+import android.widget.Button;
 
-import org.mozilla.javascript.*;
+import com.example.josip.engine.GameEngineService;
 
 public class MyActivity extends Activity {
 
@@ -22,6 +26,32 @@ public class MyActivity extends Activity {
         final String CUSTOM_STRING_FUNCTION = "var onEnter = function (string) { return string += ' and then some!' };";
 
         Log.d("JEJ", new JavaScriptEngine().runOnEnterScript(CUSTOM_STRING_FUNCTION, MY_AWESOME_STRING));
+
+        final Intent i= new Intent(this, GameEngineService.class);
+        Messenger messenger = new Messenger(new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                Log.d("QUESTER", msg.getData().getString("Poruka"));
+            }
+        });
+        i.putExtra("Messenger", messenger);
+
+        Button startButton = (Button) findViewById(R.id.startServiceButton);
+        startButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startService(i);
+            }
+        });
+
+        Button stopButton = (Button) findViewById(R.id.stopServiceButton);
+        stopButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                stopService(i);
+            }
+        });
     }
 
 
