@@ -1,54 +1,37 @@
 package com.example.josip.jstest;
 
-import android.content.Context;
 import android.util.Log;
 
-import com.evgenii.jsevaluator.JsEvaluator;
-import com.evgenii.jsevaluator.interfaces.JsCallback;
+import org.mozilla.javascript.Context;
+import org.mozilla.javascript.Scriptable;
+import org.mozilla.javascript.ScriptableObject;
 
 /**
  * Created by Josip on 09/08/2014.
  */
-class Holder<T> {
-    private T value;
-    public void setValue(T value) {
-        this.value = value;
-    }
-    public T getValue() {
-        return value;
-    }
-}
 public class JavaScriptEngine {
 
-    JsEvaluator jsEvaluator;
-
-    final Holder<String> holder = new Holder<String>();
-
-    public JavaScriptEngine(Context context) {
-        jsEvaluator = new JsEvaluator(context);
-    }
 
     public String runOnEnterScript(String script, String argument) {
         final String SUPER_MOJO = " onEnter(" + argument + ");";
 
-        jsEvaluator.evaluate(script + SUPER_MOJO, new JsCallback() {
-            @Override
-            public void onResult(String s) {
-                holder.setValue(s);
-                holder.notifyAll();
-            }
-        });
+         return doit(script+SUPER_MOJO);
+    }
 
-        synchronized (holder) {
+    private String doit(String code)
+    {
+        Context cx = Context.enter();
+        cx.setOptimizationLevel(-1);
 
-            try {
-                holder.wait();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+        try
+        {
+            Scriptable scope = cx.initStandardObjects();
+            return cx.evaluateString(scope, code, "doit:", 1, null).toString();
         }
-
-        return holder.getValue();
+        finally
+        {
+            Context.exit();
+        }
     }
 
 }

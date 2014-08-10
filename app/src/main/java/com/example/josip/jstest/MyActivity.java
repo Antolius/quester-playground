@@ -8,8 +8,7 @@ import android.view.MenuItem;
 import android.webkit.ValueCallback;
 import android.webkit.WebView;
 
-import com.evgenii.jsevaluator.JsEvaluator;
-import com.evgenii.jsevaluator.interfaces.JsCallback;
+import org.mozilla.javascript.*;
 
 public class MyActivity extends Activity {
 
@@ -22,8 +21,7 @@ public class MyActivity extends Activity {
 
         final String CUSTOM_STRING_FUNCTION = "var onEnter = function (string) { return string += ' and then some!' };";
 
-        Log.d("nesto divlje", new JavaScriptEngine(this).runOnEnterScript(CUSTOM_STRING_FUNCTION, MY_AWESOME_STRING));
-
+        Log.d("JEJ", new JavaScriptEngine().runOnEnterScript(CUSTOM_STRING_FUNCTION, MY_AWESOME_STRING));
     }
 
 
