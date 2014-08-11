@@ -26,4 +26,8 @@ public class QuestState {
     public void setVisitedCheckpoints(List<Checkpoint> visitedCheckpoints) {
         this.visitedCheckpoints = visitedCheckpoints;
     }
+
+    public Checkpoint getActiveCheckpoint () {
+        return visitedCheckpoints.get(visitedCheckpoints.size() - 1);
+    }
 }

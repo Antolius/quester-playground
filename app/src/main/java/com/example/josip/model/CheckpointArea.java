@@ -11,4 +11,6 @@ public interface CheckpointArea {
 
     public double distanceFrom(Point point, MessurmentUnit messurmentUnit);
 
+    public Circle aproximatingCircle();
+
 }

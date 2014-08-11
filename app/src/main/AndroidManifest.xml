@@ -24,7 +24,7 @@
         </activity>
 
         <service
-            android:name="com.example.josip.engine.GameEngineService"
+            android:name="com.example.josip.gameService.GameEngineService"
             android:icon="@drawable/ic_launcher"
             android:label="Test service"
             >
