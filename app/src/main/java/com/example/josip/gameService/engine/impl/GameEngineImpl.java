@@ -27,11 +27,13 @@ public class GameEngineImpl implements GameEngine {
 
     private HashMap<Checkpoint, TimerTask> aciveUpdateTimerTasks = new HashMap<Checkpoint, TimerTask>();
 
-    //TODO: injection!
-    private JavaScriptEngine javaScriptEngine = new JavaScriptEngineImpl();
+    private JavaScriptEngine javaScriptEngine;
 
     public GameEngineImpl(GameContext gameContext) {
         this.gameContext = gameContext;
+
+        //TODO: injection!
+        javaScriptEngine = new JavaScriptEngineImpl(gameContext);
     }
 
     @Override
@@ -39,7 +41,7 @@ public class GameEngineImpl implements GameEngine {
 
         String onEnterScript = readFile(checkpoint.getEventsScript());
         if (!onEnterScript.isEmpty()) {
-            if (!javaScriptEngine.runEnterScript(gameContext, onEnterScript)) {
+            if (!javaScriptEngine.runEnterScript(onEnterScript)) {
                 //enter event was halted by the onEnterScript
                 return;
             }
@@ -62,7 +64,7 @@ public class GameEngineImpl implements GameEngine {
 
         String onExitScript = readFile(checkpoint.getEventsScript());
         if (!onExitScript.isEmpty()) {
-            if (!javaScriptEngine.runExitScript(gameContext, onExitScript)) {
+            if (!javaScriptEngine.runExitScript(onExitScript)) {
                 //exit event was halted by the onEnterScript
                 return;
             }

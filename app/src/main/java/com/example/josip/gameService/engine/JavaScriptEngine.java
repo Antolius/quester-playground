@@ -8,16 +8,14 @@ import com.example.josip.gameService.GameContext;
 public interface JavaScriptEngine {
 
     /**
-     * @param gameContext current game context, provides access to other game engine components
      * @param onEnterScript String containing JavaScript function to run on enter event
      * @return false if enter event was halted by the run script, true otherwise
      */
-    public boolean runEnterScript(GameContext gameContext, String onEnterScript);
+    public boolean runEnterScript(String onEnterScript);
 
     /**
-     * @param gameContext current game context, provides access to other game engine components
      * @param onExitScript String containing JavaScript function to run on exit event
      * @return false if exit event was halted by the run script, true otherwise
      */
-    boolean runExitScript(GameContext gameContext, String onExitScript);
+    boolean runExitScript(String onExitScript);
 }
