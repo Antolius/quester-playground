@@ -1,4 +1,4 @@
-package com.example.josip.engine;
+package com.example.josip.gameService;
 
 import android.app.Service;
 import android.content.Intent;
@@ -10,22 +10,41 @@ import android.os.Messenger;
 import android.os.RemoteException;
 import android.util.Log;
 
+import com.example.josip.gameService.engine.GameEngine;
+import com.example.josip.gameService.locationService.LocationService;
+import com.example.josip.gameService.locationService.impl.LocationServiceImpl;
+import com.example.josip.gameService.stateProvider.GameStateProvider;
+
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
 
 /**
  * Created by tdubravcevic on 10.8.2014!
  */
-public class GameEngineService extends Service {
+public class GameEngineService extends Service implements GameContext {
 
     Messenger messenger;
-    private LocationService locationService;
+    private LocationServiceImpl locationService;
+    private GameStateProvider gameStateProvider;
+    private GameEngine gameEngine;
+
+    public LocationService getLocationService() {
+        return locationService;
+    }
+
+    public GameStateProvider getGameStateProvider() {
+        return gameStateProvider;
+    }
+
+    public GameEngine getGameEngine() {
+        return gameEngine;
+    }
 
     @Override
     public void onCreate() {
         Log.d("QUESTER", "Is created");
 
-        locationService = new LocationService(this, null);
+        locationService = new LocationServiceImpl(this, null);
         super.onCreate();
     }
 
@@ -52,8 +71,8 @@ public class GameEngineService extends Service {
         } catch (RemoteException e) {
             e.printStackTrace();
         }
-        Log.d("QUESTER",getApplicationContext().toString());
-        Log.d("QUESTER",getApplicationInfo().toString());
+        Log.d("QUESTER", getApplicationContext().toString());
+        Log.d("QUESTER", getApplicationInfo().toString());
 
         return Service.START_STICKY;
     }

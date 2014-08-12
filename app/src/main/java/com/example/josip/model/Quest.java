@@ -1,8 +1,5 @@
 package com.example.josip.model;
 
-import java.util.List;
-import java.util.Map;
-
 /**
  * Created by Josip on 10/08/2014.
  */
@@ -10,7 +7,7 @@ public class Quest {
 
     private long id;
     private String name;
-    private MetaData metaData;
+    private QuestMetaData metaData;
     private QuestGraph questGraph;
 
     public long getId() {
@@ -29,11 +26,11 @@ public class Quest {
         this.name = name;
     }
 
-    public MetaData getMetaData() {
+    public QuestMetaData getMetaData() {
         return metaData;
     }
 
-    public void setMetaData(MetaData metaData) {
+    public void setMetaData(QuestMetaData metaData) {
         this.metaData = metaData;
     }
 

@@ -1,4 +1,4 @@
-package com.example.josip.engine;
+package com.example.josip.gameService.locationService.impl;
 
 import android.content.Context;
 import android.location.Location;
@@ -6,11 +6,11 @@ import android.location.LocationListener;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.example.josip.gameService.locationService.LocationService;
 import com.example.josip.model.Checkpoint;
 import com.example.josip.model.Point;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
-import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.LocationClient;
 
 import java.util.List;
@@ -18,14 +18,14 @@ import java.util.List;
 /**
  * Created by tdubravcevic on 10.8.2014!
  */
-public class LocationService implements
+public class LocationServiceImpl implements LocationService,
         GooglePlayServicesClient.ConnectionCallbacks,
         GooglePlayServicesClient.OnConnectionFailedListener,
-        LocationListener{
+        LocationListener {
 
     private LocationClient locationClient;
 
-    public LocationService(Context context, List<Checkpoint> checkpointList) {
+    public LocationServiceImpl(Context context, List<Checkpoint> checkpointList) {
         locationClient = new LocationClient(context, this, this);
 
         /*
@@ -43,18 +43,18 @@ public class LocationService implements
 
     }
 
-    public void start(){
+    public void start() {
         locationClient.connect();
     }
 
-    public void stop(){
+    public void stop() {
         locationClient.disconnect();
     }
 
     @Override
     public void onConnected(Bundle bundle) {
         Log.d("QUESTER-CONN", "Is connected");
-        Log.d("QUESTER", getCurrentLocation().getLatitude()+"");
+        Log.d("QUESTER", getCurrentLocation().getLatitude() + "");
     }
 
     @Override
@@ -87,7 +87,7 @@ public class LocationService implements
 
     }
 
-    public Point getCurrentLocation(){
+    public Point getCurrentLocation() {
         Location location = locationClient.getLastLocation();
         return new Point(location.getLatitude(), location.getLongitude());
     }
