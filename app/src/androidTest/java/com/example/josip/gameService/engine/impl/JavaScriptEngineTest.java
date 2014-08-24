@@ -44,14 +44,14 @@ public class JavaScriptEngineTest extends AndroidTestCase{
         prePersistentGameObject = new PersistentGameObject();
         prePersistentGameObject.putProperty("testProperty", 3.14159);
 
-        questState = new QuestState();
-        questState.setQuestGraph(getSetUpQuestGraph());
-
         checkpoint1 = new Checkpoint();
         checkpoint2 = new Checkpoint();
 
         checkpoint1.setId(1L);
         checkpoint2.setId(2L);
+
+        questState = new QuestState();
+        questState.setQuestGraph(getSetUpQuestGraph());
 
         QuestState questState = mock(QuestState.class);
         when(questState.getQuestGraph()).thenReturn(getSetUpQuestGraph());
@@ -65,17 +65,16 @@ public class JavaScriptEngineTest extends AndroidTestCase{
         when(gameContext.getGameStateProvider()).thenReturn(gameStateProvider);
     }
 
+    public void testSimpleRunScript() {
+        javaScriptEngine.runEnterScript("5+6;");
+    }
+
     private QuestGraph getSetUpQuestGraph() {
         QuestGraph graph = new QuestGraph(Arrays.asList(checkpoint1, checkpoint2));
         graph.addEdge(checkpoint1, checkpoint2);
         graph.addEdge(checkpoint1, checkpoint1);
 
         return graph;
-    }
-
-
-    public void testDimpleRunScript() {
-
     }
 
 }

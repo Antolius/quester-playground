@@ -14,8 +14,8 @@ import java.lang.reflect.InvocationTargetException;
  */
 public class JavaScriptEngineImpl implements JavaScriptEngine {
 
-    GameContext gameContext;
-    Context javaScriptRuntimeContext;
+    private GameContext gameContext;
+    private Context javaScriptRuntimeContext;
 
     public JavaScriptEngineImpl(GameContext gameContext) {
         this.gameContext = gameContext;
