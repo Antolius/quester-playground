@@ -24,7 +24,6 @@
         android:text="@string/persistant_service_subtitle"
         android:textAppearance="?android:attr/textAppearance"
         android:textSize="12sp"
-        android:textColor="@color/Black"
         android:gravity="center_vertical"
         android:layout_width="fill_parent"
         android:layout_height="48dp"
@@ -37,7 +36,6 @@
     <Button
         android:id="@+id/startServiceButton"
         android:layout_width="fill_parent"
-        android:textColor="@color/Black"
         android:layout_height="64dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
@@ -50,7 +48,6 @@
     <Button
         android:id="@+id/stopServiceButton"
         android:layout_width="fill_parent"
-        android:textColor="@color/Black"
         android:layout_height="64dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
@@ -64,7 +61,6 @@
         android:text="@string/location_manager_subtitle"
         android:textAppearance="?android:attr/textAppearance"
         android:textSize="12sp"
-        android:textColor="@color/Black"
         android:gravity="center_vertical"
         android:layout_width="fill_parent"
         android:layout_height="48dp"
@@ -77,8 +73,58 @@
     
     <LinearLayout
         android:layout_width="fill_parent"
-        android:layout_height="72dp">
+        android:layout_height="48dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:orientation="horizontal">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textSize="14sp"
+                android:gravity="center_vertical"
+                android:layout_marginRight="16dp"
+                android:layout_marginEnd="16dp"
+                android:text="Latitude:"/>
+
+            <TextView
+                android:id="@+id/latitude"
+                android:textAppearance="?android:attr/textAppearance"
+                android:textSize="14sp"
+                android:gravity="center_vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent" />
 
         </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="48dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:orientation="horizontal">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textSize="14sp"
+            android:gravity="center_vertical"
+            android:layout_marginRight="16dp"
+            android:layout_marginEnd="16dp"
+            android:text="Longitude:"/>
+
+        <TextView
+            android:id="@+id/longitude"
+            android:textAppearance="?android:attr/textAppearance"
+            android:textSize="14sp"
+            android:gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent" />
+
+    </LinearLayout>
 
 </LinearLayout>
