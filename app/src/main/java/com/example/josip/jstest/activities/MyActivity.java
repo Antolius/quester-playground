@@ -1,8 +1,8 @@
-package com.example.josip.jstest;
+package com.example.josip.jstest.activities;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -14,9 +14,9 @@ import android.view.View;
 import android.widget.Button;
 
 import com.example.josip.gameService.GameEngineService;
-import com.example.josip.Example;
 import com.example.josip.QExample;
-import com.mysema.query.sql.HSQLDBTemplates;
+import com.example.josip.jstest.JavaScriptEngine;
+import com.example.josip.jstest.R;
 import com.mysema.query.sql.SQLQuery;
 import com.mysema.query.sql.SQLQueryImpl;
 import com.mysema.query.sql.SQLTemplates;
@@ -31,16 +31,20 @@ import org.slf4j.LoggerFactory;
 import org.sqldroid.SQLDroidDriver;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.util.List;
 import java.util.Properties;
+
+import javax.inject.Inject;
 
 import static com.mysema.query.alias.Alias.$;
 import static com.mysema.query.alias.Alias.alias;
 
-public class MyActivity extends Activity {
+public class MyActivity extends InjectionActivity {
 
     private static final Logger logger = LoggerFactory.getLogger(MyActivity.class);
+
+    @Inject
+    LocationManager locationManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
