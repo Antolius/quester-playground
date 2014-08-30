@@ -1,11 +1,21 @@
 package com.example.josip.model;
 
+import com.mysema.query.annotations.QueryProjection;
+
+import java.io.Serializable;
+
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+
 /**
  * Created by Josip on 10/08/2014.
  */
-public class Point {
+@Embeddable
+public class Point implements Serializable {
 
+    @Column(name = "latitude")
     private double latitude;
+    @Column(name = "longitude")
     private double longitude;
 
     public Point() {

@@ -13,9 +13,23 @@ android {
     }
     buildTypes {
         release {
+            runProguard true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
             runProguard false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+    packagingOptions {
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/license.txt'
+    }
+    dexOptions {
+        incremental false
+        preDexLibraries = false
+        jumboMode = true
     }
 }
 
@@ -28,7 +42,7 @@ sourceSets {
     generated
 }
 
-sourceSets.generated.java.srcDirs = ['src/main/generated']
+sourceSets.generated.java.srcDirs = ['src/main/java']
 
 configurations {
     querydslapt
@@ -40,10 +54,13 @@ dependencies {
     compile 'com.google.android.gms:play-services:5.0.89'
     compile 'org.slf4j:slf4j-android:1.7.7'
     //compile 'javax.persistence:persistence-api:1.0.2'
+    compile 'javax.annotation:javax.annotation-api:1.2'
     compile 'com.mysema.querydsl:querydsl-sql:2.7.0'
-    compile 'asm:asm:3.3.1'
-    compile 'cglib:cglib:2.2.2'
+    //compile 'asm:asm:3.3.1'
+    //compile 'cglib:cglib:2.2.2'
     compile 'org.flywaydb:flyway-core:3.0'
+    compile 'org.springframework.android:spring-android-rest-template:1.0.1.RELEASE'
+    //compile 'com.fasterxml.jackson.core:jackson-databind:2.3.2'
     androidTestCompile "org.mockito:mockito-core:1.9.5"
     androidTestCompile "com.google.dexmaker:dexmaker:1.0"
     androidTestCompile "com.google.dexmaker:dexmaker-mockito:1.0"
@@ -58,6 +75,7 @@ task generateQueryDSL(type: Compile, group: 'build', description: 'Generates the
             "-processor", "com.mysema.query.apt.jpa.JPAAnnotationProcessor"
     ]
     destinationDir = sourceSets.generated.java.srcDirs.iterator().next()
+    //namingStrategy = "OriginalNamingStrategy"
     dependencyCacheDir = new File(destinationDir, "dependencyCacheDir")
 }
 compileJava.dependsOn generateQueryDSL

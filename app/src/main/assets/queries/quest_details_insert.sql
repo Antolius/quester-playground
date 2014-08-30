@@ -1,0 +1,1 @@
+INSERT INTO quest_details VALUES (value1, value2, value3,...valueN);

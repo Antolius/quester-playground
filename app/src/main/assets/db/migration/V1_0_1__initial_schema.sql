@@ -1,4 +1,7 @@
-CREATE TABLE Example(
-   example_id INT PRIMARY KEY     NOT NULL,
-   name           TEXT    NOT NULL
+CREATE TABLE quest_details(
+   id INTEGER PRIMARY KEY AUTOINCREMENT,
+   name TEXT,
+   latitude REAL,
+   longitude REAL,
+   description TEXT
 );

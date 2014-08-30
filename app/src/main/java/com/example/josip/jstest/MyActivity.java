@@ -1,7 +1,9 @@
 package com.example.josip.jstest;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -11,31 +13,28 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
+import com.example.josip.communication.Greeting;
+import com.example.josip.communication.HttpRequestTask;
 import com.example.josip.gameService.GameEngineService;
-import com.example.josip.Example;
-import com.example.josip.QExample;
-import com.mysema.query.sql.HSQLDBTemplates;
-import com.mysema.query.sql.SQLQuery;
-import com.mysema.query.sql.SQLQueryImpl;
-import com.mysema.query.sql.SQLTemplates;
-import com.mysema.query.sql.SQLiteTemplates;
+import com.example.josip.model.Point;
+import com.example.josip.persistance.QuestDetails;
+import com.example.josip.persistance.flyway.FlywayDatabaseMigrator;
+import com.example.josip.persistance.manager.QuestDetailsRepository;
+import com.mysema.query.Tuple;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 //import org.flywaydb.core.Flyway;
 //import org.flywaydb.core.api.android.ContextHolder;
-import org.flywaydb.core.Flyway;
-import org.flywaydb.core.api.android.ContextHolder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.sqldroid.SQLDroidDriver;
-
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.util.List;
-import java.util.Properties;
-
-import static com.mysema.query.alias.Alias.$;
-import static com.mysema.query.alias.Alias.alias;
 
 public class MyActivity extends Activity {
 
@@ -46,38 +45,34 @@ public class MyActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my);
 
-        SQLiteDatabase db = openOrCreateDatabase("test", 0, null);
-        ContextHolder.setContext(this);
-        Flyway flyway = new Flyway();
-        flyway.setDataSource("jdbc:sqlite:" + db.getPath(), "", "");
+        SQLiteDatabase database = openOrCreateDatabase("test", 0, null);
+
+        //copyDatabase(this, "test");
+
+        FlywayDatabaseMigrator flyway = new FlywayDatabaseMigrator(database, this);
+        //flyway.clean();
         flyway.migrate();
 
-        Connection connection = null;
-        try {
-            connection = new SQLDroidDriver().connect("jdbc:sqlite:" + db.getPath() , new Properties());
-        } catch (Exception e) {
-            e.printStackTrace();
+
+        QuestDetailsRepository repository = new QuestDetailsRepository(database);
+        /*
+        QuestDetails details = new QuestDetails();
+        details.setName("tres");
+        details.setPoint(new Point(1.0, 1.0));
+        repository.save(details);
+        repository.save(details);
+        */
+
+        for (QuestDetails questDetails : repository.getAllDetailsSortedByDistance(new Point(0.0, 0.0))) {
+            logger.info(questDetails.getId() + ":" + questDetails.getName());
         }
 
-        SQLTemplates dialect = new SQLiteTemplates(); // SQL-dialect
-        SQLQuery query = new SQLQueryImpl(connection, dialect);
-
-        QExample c = new QExample("example");
-        List<String> lastNames = query.from(c)
-                .where(c.name.eq("Bob"))
-                .list(c.name);
-        logger.info(lastNames.size()+"");
-
         String MY_AWESOME_STRING = "'Awesome'";
-
         final String CUSTOM_STRING_FUNCTION = "var onEnter = function (string) { return string += ' and then some!' };";
+        Log.d("JSTEST", new JavaScriptEngine().runOnEnterScript(CUSTOM_STRING_FUNCTION, MY_AWESOME_STRING));
 
-        Log.d("JEJ", new JavaScriptEngine().runOnEnterScript(CUSTOM_STRING_FUNCTION, MY_AWESOME_STRING));
-        logger.debug("LOGGING JUHU");
-        logger.info("LOGGING INFO");
-
-        final Intent i= new Intent(this, GameEngineService.class);
-        Messenger messenger = new Messenger(new Handler(){
+        final Intent i = new Intent(this, GameEngineService.class);
+        Messenger messenger = new Messenger(new Handler() {
             @Override
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
@@ -101,6 +96,15 @@ public class MyActivity extends Activity {
                 stopService(i);
             }
         });
+
+        /*
+        new HttpRequestTask(){
+            @Override
+            public void onComplete(Greeting greeting) {
+                logger.info(greeting.getContent());
+            }
+        }.execute();
+        */
     }
 
 
@@ -121,5 +125,50 @@ public class MyActivity extends Activity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void copyDatabase(Context c, String DATABASE_NAME) {
+        String databasePath = c.getDatabasePath(DATABASE_NAME).getPath();
+        File f = new File(databasePath);
+        OutputStream myOutput = null;
+        InputStream myInput = null;
+        Log.d("testing", " testing db path " + databasePath);
+        Log.d("testing", " testing db exist " + f.exists());
+
+        if (f.exists()) {
+            try {
+
+                File directory = getExternalFilesDir("");
+                if (!directory.exists())
+                    directory.mkdir();
+
+                myOutput = new FileOutputStream(directory.getAbsolutePath()
+                        + "/" + DATABASE_NAME);
+                myInput = new FileInputStream(databasePath);
+
+                logger.info(directory.getAbsolutePath() + "/" + DATABASE_NAME);
+
+                byte[] buffer = new byte[1024];
+                int length;
+                while ((length = myInput.read(buffer)) > 0) {
+                    myOutput.write(buffer, 0, length);
+                }
+
+                myOutput.flush();
+            } catch (Exception e) {
+            } finally {
+                try {
+                    if (myOutput != null) {
+                        myOutput.close();
+                        myOutput = null;
+                    }
+                    if (myInput != null) {
+                        myInput.close();
+                        myInput = null;
+                    }
+                } catch (Exception e) {
+                }
+            }
+        }
     }
 }

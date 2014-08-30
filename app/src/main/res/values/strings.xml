@@ -4,5 +4,7 @@
     <string name="app_name">JSTest</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_html_template">HtmlTemplateActivity</string>
+    <string name="title_activity_checkpoint">CheckpointActivity</string>
 
 </resources>
