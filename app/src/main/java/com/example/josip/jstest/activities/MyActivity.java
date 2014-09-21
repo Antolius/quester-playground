@@ -44,7 +44,7 @@ public class MyActivity extends InjectionActivity {
     private static final Logger logger = LoggerFactory.getLogger(MyActivity.class);
     @Inject
     LocationManager locationManager;
-    private Button startServiceButton, stopServiceButton;
+    private Button startServiceButton, stopServiceButton, startMapBrowseActivity;
     private TextView latitudeText, longitudeText;
 
     @Override
@@ -57,6 +57,7 @@ public class MyActivity extends InjectionActivity {
 
         useLocationManager();
 
+        final Intent mapActivityIntent = new Intent(this, MapBrowseActivity.class);
         final Intent i = new Intent(this, GameEngineService.class);
         Messenger messenger = new Messenger(new Handler() {
             @Override
@@ -78,6 +79,13 @@ public class MyActivity extends InjectionActivity {
             @Override
             public void onClick(View view) {
                 stopService(i);
+            }
+        });
+
+        startMapBrowseActivity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(mapActivityIntent);
             }
         });
     }
@@ -104,6 +112,8 @@ public class MyActivity extends InjectionActivity {
     private void initViewComponents() {
         startServiceButton = (Button) findViewById(R.id.startServiceButton);
         stopServiceButton = (Button) findViewById(R.id.stopServiceButton);
+
+        startMapBrowseActivity = (Button) findViewById(R.id.startMapBrowseActivity);
 
         latitudeText = (TextView) findViewById(R.id.latitude);
         longitudeText = (TextView) findViewById(R.id.longitude);
