@@ -1,41 +1,20 @@
 package com.example.josip.jstest;
 
 import android.app.Activity;
-import android.content.Intent;
+import android.content.Context;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.os.Messenger;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
+import android.webkit.WebView;
 
-import com.example.josip.gameService.GameEngineService;
-import com.example.josip.Example;
-import com.example.josip.QExample;
-import com.mysema.query.sql.HSQLDBTemplates;
-import com.mysema.query.sql.SQLQuery;
-import com.mysema.query.sql.SQLQueryImpl;
-import com.mysema.query.sql.SQLTemplates;
-import com.mysema.query.sql.SQLiteTemplates;
+import com.example.josip.model.PersistentGameObject;
 
-//import org.flywaydb.core.Flyway;
-//import org.flywaydb.core.api.android.ContextHolder;
-import org.flywaydb.core.Flyway;
-import org.flywaydb.core.api.android.ContextHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.sqldroid.SQLDroidDriver;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.util.List;
-import java.util.Properties;
-
-import static com.mysema.query.alias.Alias.$;
-import static com.mysema.query.alias.Alias.alias;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 public class MyActivity extends Activity {
 
@@ -44,82 +23,99 @@ public class MyActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_my);
+        setContentView(R.layout.activity_html_template);
 
-        SQLiteDatabase db = openOrCreateDatabase("test", 0, null);
-        ContextHolder.setContext(this);
-        Flyway flyway = new Flyway();
-        flyway.setDataSource("jdbc:sqlite:" + db.getPath(), "", "");
-        flyway.migrate();
+        PersistentGameObject persistentGameObject = new PersistentGameObject();
 
-        Connection connection = null;
+        WebView view = (WebView) findViewById(R.id.templateHolder);
+        view.getSettings().setDomStorageEnabled(true);
+        view.getSettings().setJavaScriptEnabled(true);
+        view.addJavascriptInterface(new WebAppInterface(this, persistentGameObject), "Android");
+
+        JavaScriptEngine javaScriptEngine = new JavaScriptEngine(persistentGameObject);
         try {
-            connection = new SQLDroidDriver().connect("jdbc:sqlite:" + db.getPath() , new Properties());
+            javaScriptEngine.onEnter(readFromFile("scripts/onEnter.js", this), "Text added to on Enter");
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.info("QUESTER", "Invoking failed", e);
         }
 
-        SQLTemplates dialect = new SQLiteTemplates(); // SQL-dialect
-        SQLQuery query = new SQLQueryImpl(connection, dialect);
+        String header = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>";
+        String htmlString = readFromFile("test.html", this);
 
-        QExample c = new QExample("example");
-        List<String> lastNames = query.from(c)
-                .where(c.name.eq("Bob"))
-                .list(c.name);
-        logger.info(lastNames.size()+"");
-
-        String MY_AWESOME_STRING = "'Awesome'";
-
-        final String CUSTOM_STRING_FUNCTION = "var onEnter = function (string) { return string += ' and then some!' };";
-
-        Log.d("JEJ", new JavaScriptEngine().runOnEnterScript(CUSTOM_STRING_FUNCTION, MY_AWESOME_STRING));
-        logger.debug("LOGGING JUHU");
-        logger.info("LOGGING INFO");
-
-        final Intent i= new Intent(this, GameEngineService.class);
-        Messenger messenger = new Messenger(new Handler(){
-            @Override
-            public void handleMessage(Message msg) {
-                super.handleMessage(msg);
-                Log.d("QUESTER", msg.getData().getString("Poruka"));
-            }
-        });
-        i.putExtra("Messenger", messenger);
-
-        Button startButton = (Button) findViewById(R.id.startServiceButton);
-        startButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startService(i);
-            }
-        });
-
-        Button stopButton = (Button) findViewById(R.id.stopServiceButton);
-        stopButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                stopService(i);
-            }
-        });
+        view.loadDataWithBaseURL("file:///android_asset/", header + htmlString, "text/html", "UTF-8", null);
+        //view.loadData(header + htmlString, "text/html", "UTF-8");
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.my, menu);
+        getMenuInflater().inflate(R.menu.html_template, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_settings) {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private String readFromFile(String fileName, Context context) {
+        StringBuilder returnString = new StringBuilder();
+        InputStream fIn = null;
+        InputStreamReader isr = null;
+        BufferedReader input = null;
+        try {
+            fIn = context.getResources().getAssets().open(fileName, Context.MODE_WORLD_READABLE);
+            isr = new InputStreamReader(fIn);
+            input = new BufferedReader(isr);
+            String line = "";
+            while ((line = input.readLine()) != null) {
+                returnString.append(line);
+            }
+        } catch (Exception e) {
+            e.getMessage();
+        } finally {
+            try {
+                if (isr != null)
+                    isr.close();
+                if (fIn != null)
+                    fIn.close();
+                if (input != null)
+                    input.close();
+            } catch (Exception e2) {
+                e2.getMessage();
+            }
+        }
+        return returnString.toString();
+    }
+
+    private String insertObject(String htmlString, PersistentGameObject persistentGameObject) {
+        int index = htmlString.lastIndexOf("<head>") + 6;
+
+        String persistence = "<script> var persistence = {";
+        for(String key : persistentGameObject.propertyKeys()){
+            persistence += key + ":" + "\"" +  persistentGameObject.getProperty(key) + "\"";
+        }
+        persistence += "};</script>";
+
+        return new StringBuilder(htmlString).insert(index, persistence).toString();
+    }
+
+    private String insertCss(String htmlString) {
+        int index = htmlString.lastIndexOf("<head>") + 6;
+        String css = "<style>" + readFromFile("css/bootstrap.css", this);
+        css += readFromFile("css/bootstrap-theme.css", this);
+        css += "</style>";
+        return new StringBuilder(htmlString).insert(index, css).toString();
+    }
+
+    private String insertJs(String htmlString) {
+        int index = htmlString.lastIndexOf("<head>") + 6;
+        String js = "<script>" + readFromFile("scripts/jQuery-2.1.0.js", this);
+        js += readFromFile("scripts/bootstrap.js", this);
+        js += "</script>";
+        return new StringBuilder(htmlString).insert(index, js).toString();
     }
 }

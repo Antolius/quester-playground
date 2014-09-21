@@ -1,0 +1,45 @@
+<html>
+<head>
+
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap-theme.css">
+
+    <script src="scripts/jQuery-2.1.0.js"></script>
+    <script src="scripts/bootstrap.js"></script>
+
+    <script>
+        $('.carousel').carousel({
+            interval: 500
+        });
+        function myFunction() {
+            document.getElementById("demo").innerHTML = Android.getProperty("text");
+            Android.putProperty('text', 'If you are reading this, YEAH!');
+            Android.showToast("JUHUUU");
+        }
+        function revert() {
+            document.getElementById("demo").innerHTML = "A Paragraph.";
+        }
+    </script>
+</head>
+<body>
+<h1>My Web Page</h1>
+
+<p id="demo">A Paragraph.</p>
+
+<div class="row">
+    <div class="col-sm-6 col-xs-6">
+        <button type="button" class="btn btn-success" onclick="myFunction()">Try it</button>
+    </div>
+    <div class="col-sm-6 col-xs-6">
+        <button type="button" class="btn btn-danger" onclick="revert()">Revert</button>
+    </div>
+</div>
+
+<div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+    <div class="carousel-inner">
+        <div class="item"><img src="img/bells.gif" class="img-rounded"></div>
+        <div class="item active"><img src="img/test.jpg" class="img-rounded"></div>
+    </div>
+</div>
+</body>
+</html>

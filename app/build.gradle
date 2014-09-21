@@ -4,6 +4,9 @@ android {
     compileSdkVersion 20
     buildToolsVersion '20.0.0'
 
+    packagingOptions{
+        exclude 'META-INF/LICENSE.txt'
+    }
     defaultConfig {
         applicationId "com.example.josip.jstest"
         minSdkVersion 15
@@ -28,7 +31,7 @@ sourceSets {
     generated
 }
 
-sourceSets.generated.java.srcDirs = ['src/main/generated']
+sourceSets.generated.java.srcDirs = ['src/main/assets']
 
 configurations {
     querydslapt
