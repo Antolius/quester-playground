@@ -7,21 +7,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.josip.jstest.R;
-import com.example.josip.model.Checkpoint;
 import com.example.josip.model.Point;
 import com.example.josip.model.Quest;
 import com.example.josip.providers.QuestProvider;
-import com.google.android.gms.maps.CameraUpdate;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -29,7 +26,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
@@ -54,39 +50,29 @@ public class MapBrowseActivity extends Activity {
         final ListView listView = (ListView) findViewById(R.id.listView);
         final ArrayList<Quest> quests = QuestProvider.getMockedQuests(10);
 
+        final MarkerListAdapter<Quest> questMarkerListAdapter = new QuestMarkerListAdapter(map, quests);
 
         final QuestArrayAdapter questArrayAdapter = new QuestArrayAdapter(this, quests);
         listView.setAdapter(questArrayAdapter);
 
-        listView.setOnScrollListener(new ListView.OnScrollListener() {
+        listView.setOnItemClickListener(new ListView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                questMarkerListAdapter.clickOn(position);
+            }
+        });
 
+        listView.setOnScrollListener(new ListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
             }
 
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                if (firstVisibleItem > 2) {
-                    for (Quest quest : quests.subList(0, firstVisibleItem - 1)) {
-                        if (questToMarkerMap.containsKey(quest)) {
-                            questToMarkerMap.get(quest).remove();
-                            questToMarkerMap.remove(quest);
-                        }
-                    }
-                }
-
-                int end = firstVisibleItem + visibleItemCount < quests.size() ? firstVisibleItem + visibleItemCount : quests.size();
-                for (Quest quest : quests.subList(firstVisibleItem, end)) {
-                    if (!questToMarkerMap.containsKey(quest)) {
-                        questToMarkerMap.put(quest, map.addMarker(getMarkerOptionsForQuest(quest)));
-                    }
-                }
-
-                updateMapZoom(questToMarkerMap.values(), map);
-
+                questMarkerListAdapter.scrollTo(firstVisibleItem, visibleItemCount);
 
                 if (totalItemCount == firstVisibleItem + visibleItemCount) {
-                    quests.addAll(QuestProvider.getMockedQuests(10));
+                    questMarkerListAdapter.addAll(QuestProvider.getMockedQuests(10));
                     questArrayAdapter.notifyDataSetChanged();
                 }
             }
@@ -94,29 +80,10 @@ public class MapBrowseActivity extends Activity {
 
     }
 
-    private void updateMapZoom(Collection<Marker> markers, GoogleMap map) {
-        if (markers.size() > 0) {
-            LatLngBounds.Builder builder = new LatLngBounds.Builder();
-            for (Marker marker : markers) {
-                builder.include(marker.getPosition());
-            }
-            LatLngBounds bounds = builder.build();
-
-            int padding = 16;
-            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, padding);
-
-            map.animateCamera(cameraUpdate);
-        }
+    private String getCoordinatesStringFromQuest(Quest quest) {
+        Point coordinates = quest.getQuestGraph().getAllCheckpoints().iterator().next().getArea().aproximatingCircle().getCenter();
+        return String.format("starting coordinates: latitude %2.2f; longitude %2.2f;", coordinates.getLatitude(), coordinates.getLongitude());
     }
-
-    private MarkerOptions getMarkerOptionsForQuest(Quest quest) {
-        Point checkpointCenter = quest.getQuestGraph().getAllCheckpoints().iterator().next().getArea().aproximatingCircle().getCenter();
-        LatLng coordinates = new LatLng(checkpointCenter.getLatitude(), checkpointCenter.getLongitude());
-        return new MarkerOptions()
-                .position(coordinates)
-                .title(quest.getName());
-    }
-
 
     private class QuestArrayAdapter extends ArrayAdapter<Quest> {
 
@@ -142,31 +109,30 @@ public class MapBrowseActivity extends Activity {
             }
 
             Quest rowItem = quests.get(position);
-            Checkpoint itemsFirstCheckpoint = rowItem.getQuestGraph().getAllCheckpoints().iterator().next();
 
             TextView titleView = (TextView) rowView.findViewById(R.id.title);
             titleView.setText(rowItem.getName());
             TextView subtitleView = (TextView) rowView.findViewById(R.id.subtitle);
-            StringBuilder coordinatesStringBuilder = new StringBuilder("starting coordinates: ");
-            coordinatesStringBuilder.append("latitude-");
-            coordinatesStringBuilder.append(itemsFirstCheckpoint.getArea().aproximatingCircle().getCenter().getLatitude());
-            coordinatesStringBuilder.append("; longitude-");
-            coordinatesStringBuilder.append(itemsFirstCheckpoint.getArea().aproximatingCircle().getCenter().getLongitude());
-            coordinatesStringBuilder.append(";");
-            subtitleView.setText(coordinatesStringBuilder.toString());
+
+            subtitleView.setText(getCoordinatesStringFromQuest(rowItem));
 
             return rowView;
         }
-
-        @Override
-        public long getItemId(int position) {
-            return getItem(position).getId();
-        }
-
-        @Override
-        public boolean hasStableIds() {
-            return true;
-        }
     }
 
+    private class QuestMarkerListAdapter extends MarkerListAdapter<Quest> {
+        public QuestMarkerListAdapter(GoogleMap map, ArrayList<Quest> quests) {
+            super(map, quests);
+        }
+
+        @Override
+        public MarkerOptions getMarkerOptionsForItem(Quest quest, int itemPosition) {
+            Point checkpointCenter = quest.getQuestGraph().getAllCheckpoints().iterator().next().getArea().aproximatingCircle().getCenter();
+            LatLng coordinates = new LatLng(checkpointCenter.getLatitude(), checkpointCenter.getLongitude());
+            return new MarkerOptions()
+                    .draggable(false)
+                    .position(coordinates)
+                    .title(quest.getName());
+        }
+    }
 }
