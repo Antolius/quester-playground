@@ -1,23 +1,33 @@
 package com.example.josip.location;
 
 import android.app.Activity;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.example.josip.jstest.R;
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationStatusCodes;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import static com.google.android.gms.common.GooglePlayServicesClient.*;
+import static com.google.android.gms.location.LocationClient.*;
 
 public class LocationTestActivity extends Activity implements
-        ConnectionCallbacks, OnConnectionFailedListener, LocationListener{
+        ConnectionCallbacks, OnConnectionFailedListener,
+        LocationListener, OnAddGeofencesResultListener {
 
     private LocationClient locationClient;
 
@@ -37,11 +47,31 @@ public class LocationTestActivity extends Activity implements
         startService(intent);
 
         locationClient.requestLocationUpdates(LocationRequest.create().setInterval(1000), this);
+
+        List<Geofence> geofences = new ArrayList<Geofence>();
+        for (Location location : SendMockLocationsService.getMockedLocations()) {
+            Geofence geofence = new Geofence.Builder()
+                    .setRequestId(location.getLatitude() + "")
+                    .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER)
+                    .setCircularRegion(location.getLatitude(), location.getLongitude(), 1000.0f)
+                    .setExpirationDuration(Geofence.NEVER_EXPIRE)
+                    .build();
+            geofences.add(geofence);
+        }
+
+        Intent geofenceIntent = new Intent(this, GeofenceIntent.class);
+
+        locationClient.addGeofences(geofences, PendingIntent.getService(
+                this,
+                0,
+                geofenceIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT), this);
+
     }
 
     @Override
     public void onLocationChanged(Location location) {
-        Toast.makeText(this, "L: " + location.getProvider(), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, location.getLatitude() + "|" + location.getLongitude(), Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -67,5 +97,14 @@ public class LocationTestActivity extends Activity implements
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
 
+    }
+
+    @Override
+    public void onAddGeofencesResult(int statusCode, String[] strings) {
+        if (LocationStatusCodes.SUCCESS == statusCode) {
+            Log.d("QUESTER", "Added geofences");
+        } else {
+            Log.e("QUESTE", "Adding geofences failed");
+        }
     }
 }

@@ -9,26 +9,45 @@ import android.provider.Settings;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.location.LocationClient;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 import static com.google.android.gms.common.GooglePlayServicesClient.*;
 
 public class SendMockLocationsService extends Service implements
         ConnectionCallbacks, OnConnectionFailedListener {
 
+    public static List<Location> getMockedLocations(){
+        List<Location> mockLocations = new ArrayList<Location>();
+
+        for(int i = 0; i<10; i++){
+            Location mockLocation = new Location("flp");
+            mockLocation.setAccuracy(3.0f);
+            mockLocation.setLatitude(45+i);
+            mockLocation.setLongitude(15+i);
+            mockLocations.add(mockLocation);
+        }
+        return mockLocations;
+    }
+
 
     private LocationClient locationClient;
-
+    Random random;
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
         if (Settings.Secure.getInt(this.getContentResolver(), Settings.Secure.ALLOW_MOCK_LOCATION, 0) == 0)
-            Toast.makeText(this, "U jebote nije ukljucen mock", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Setting for mock locations not enabled!", Toast.LENGTH_LONG).show();
 
         locationClient = new LocationClient(this,this,this);
         locationClient.connect();
+
+        random = new Random();
+
         return Service.START_STICKY;
     }
 
@@ -39,14 +58,27 @@ public class SendMockLocationsService extends Service implements
 
     @Override
     public void onConnected(Bundle bundle) {
+
         locationClient.setMockMode(true);
-        Location location = new Location("flp");
-        location.setLatitude(1.0);
-        location.setLongitude(1.0);
-        location.setAccuracy(3.0f);
-        location.setTime(System.currentTimeMillis());
-        locationClient.setMockLocation(location);
+
+        for (Location mockLocation : getMockedLocations()) {
+
+            mockLocation.setTime(System.currentTimeMillis());
+
+            locationClient.setMockLocation(mockLocation);
+
+            try {
+                Thread.sleep((long) (5000));
+            } catch (InterruptedException e) {
+                return ;
+            }
+        }
     }
+
+    private double randomDouble(){
+        return 0.01 + (0.02 - 0.01) * random.nextDouble();
+    }
+
 
     @Override
     public void onDisconnected() {
