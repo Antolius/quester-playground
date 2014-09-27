@@ -6,7 +6,7 @@ package com.example.josip.model;
 public class Circle {
 
     private Point center;
-    private double radius;
+    private float radius;
 
     public Point getCenter() {
         return center;
@@ -16,11 +16,11 @@ public class Circle {
         this.center = center;
     }
 
-    public double getRadius() {
+    public float getRadius() {
         return radius;
     }
 
-    public void setRadius(double radius) {
+    public void setRadius(float radius) {
         this.radius = radius;
     }
 }

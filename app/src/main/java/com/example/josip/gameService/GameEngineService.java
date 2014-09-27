@@ -14,9 +14,11 @@ import com.example.josip.gameService.engine.GameEngine;
 import com.example.josip.gameService.locationService.LocationService;
 import com.example.josip.gameService.locationService.impl.LocationServiceImpl;
 import com.example.josip.gameService.stateProvider.GameStateProvider;
+import com.example.josip.model.Checkpoint;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 
 /**
  * Created by tdubravcevic on 10.8.2014!
@@ -44,7 +46,7 @@ public class GameEngineService extends Service implements GameContext {
     public void onCreate() {
         Log.d("QUESTER", "Is created");
 
-        locationService = new LocationServiceImpl(this, null);
+        locationService = new LocationServiceImpl(this, new ArrayList<Checkpoint>());
         super.onCreate();
     }
 

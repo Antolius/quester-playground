@@ -1,11 +1,14 @@
 package com.example.josip.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.io.File;
 
 /**
  * Created by Josip on 10/08/2014.
  */
-public final class Checkpoint {
+public final class Checkpoint implements Parcelable {
 
     private long id;
     private String name;
@@ -68,5 +71,15 @@ public final class Checkpoint {
     @Override
     public int hashCode() {
         return (int) (id ^ (id >>> 47));
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+
     }
 }
