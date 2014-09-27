@@ -73,7 +73,7 @@ public class QuestProvider {
                 Circle circle = new Circle();
 
                 circle.setCenter(new Point(45.8 + random.nextDouble() / 10, 15.9 + random.nextDouble() / 10));
-                circle.setRadius(random.nextDouble());
+                circle.setRadius(random.nextFloat());
 
                 return circle;
             }

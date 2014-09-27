@@ -2,7 +2,10 @@ package com.example.josip.location;
 
 import android.app.Activity;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,6 +13,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.example.josip.gameService.engine.GameEngine;
+import com.example.josip.gameService.engine.impl.GameEngineImpl;
 import com.example.josip.jstest.R;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.location.Geofence;
@@ -27,9 +32,10 @@ import static com.google.android.gms.location.LocationClient.*;
 
 public class LocationTestActivity extends Activity implements
         ConnectionCallbacks, OnConnectionFailedListener,
-        LocationListener, OnAddGeofencesResultListener {
+        LocationListener, OnAddGeofencesResultListener, OnRemoveGeofencesResultListener {
 
     private LocationClient locationClient;
+    private GameEngine gameEngine;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +44,18 @@ public class LocationTestActivity extends Activity implements
 
         locationClient = new LocationClient(this, this, this);
         locationClient.connect();
+
+        IntentFilter checkpointEnteredFilter = new IntentFilter("Entered checkpoint area");
+
+        BroadcastReceiver receiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                Log.d("QUESTER", "WAHOOOOO");
+                //locationClient.removeGeofences(new ArrayList<String>(), );
+            }
+        };
+
+        registerReceiver(receiver, checkpointEnteredFilter);
     }
 
     @Override
@@ -106,5 +124,15 @@ public class LocationTestActivity extends Activity implements
         } else {
             Log.e("QUESTE", "Adding geofences failed");
         }
+    }
+
+    @Override
+    public void onRemoveGeofencesByRequestIdsResult(int i, String[] strings) {
+
+    }
+
+    @Override
+    public void onRemoveGeofencesByPendingIntentResult(int i, PendingIntent pendingIntent) {
+
     }
 }

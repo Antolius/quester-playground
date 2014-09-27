@@ -1,5 +1,7 @@
 package com.example.josip.model;
 
+import android.location.Location;
+
 /**
  * Created by Josip on 10/08/2014.
  */
@@ -14,6 +16,13 @@ public class Point {
     public Point(double latitude, double longitude) {
         this.latitude = latitude;
         this.longitude = longitude;
+    }
+
+    public static Point fromLocation(Location location){
+        Point point = new Point();
+        point.latitude = location.getLatitude();
+        point.longitude = location.getLongitude();
+        return point;
     }
 
     public double getLatitude() {

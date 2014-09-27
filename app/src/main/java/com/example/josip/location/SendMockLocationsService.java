@@ -23,7 +23,7 @@ public class SendMockLocationsService extends Service implements
     public static List<Location> getMockedLocations(){
         List<Location> mockLocations = new ArrayList<Location>();
 
-        for(int i = 0; i<10; i++){
+        for(int i = 0; i<1; i++){
             Location mockLocation = new Location("flp");
             mockLocation.setAccuracy(3.0f);
             mockLocation.setLatitude(45+i);
