@@ -3,25 +3,19 @@ package com.example.josip.location;
 import android.app.IntentService;
 import android.content.Intent;
 import android.location.Location;
-import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
-import android.widget.Toast;
 
-import com.example.josip.gameService.engine.GameEngine;
-import com.example.josip.jstest.MyApplication;
 import com.example.josip.model.Checkpoint;
 import com.example.josip.model.Point;
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.LocationClient;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class GeofenceIntent extends IntentService {
 
-    GameEngine gameEngine;
-
     public GeofenceIntent() {
-        super("test");
+        super("geofence intent");
     }
 
     public GeofenceIntent(String name) {
@@ -30,18 +24,18 @@ public class GeofenceIntent extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        int transitionType = LocationClient.getGeofenceTransition(intent);
 
-        List<Checkpoint> checkpoints = intent.getParcelableArrayListExtra("checkpoints");
-        //Checkpoint checkpoint = getTriggeringCheckpoint(checkpoints, LocationClient.getTriggeringGeofences(intent));
+        ArrayList<Checkpoint> checkpoints =
+                (ArrayList<Checkpoint>) intent.getSerializableExtra("checkpoints");
+        Checkpoint checkpoint =
+                getTriggeringCheckpoint(checkpoints, LocationClient.getTriggeringGeofences(intent));
 
         Location location = LocationClient.getTriggeringLocation(intent);
 
-        Intent broadcastIntent = new Intent("Entered checkpoint area");
-        sendBroadcast(broadcastIntent);
-        //if (checkpoint.getArea().isInside(Point.fromLocation(location)))
-            //gameEngine.onCheckpointAreaEnter(checkpoint);
-
+        if (checkpoint.getArea().isInside(Point.fromLocation(location))){
+            sendBroadcast(new Intent("Entered checkpoint area")
+                                .putExtra("checkpoint", checkpoint));
+        }
     }
 
     private Checkpoint getTriggeringCheckpoint(List<Checkpoint> checkpoints,

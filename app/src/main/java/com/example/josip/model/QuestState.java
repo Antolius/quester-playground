@@ -2,6 +2,7 @@ package com.example.josip.model;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by Josip on 10/08/2014.
@@ -29,5 +30,9 @@ public class QuestState {
 
     public Checkpoint getActiveCheckpoint () {
         return visitedCheckpoints.get(visitedCheckpoints.size() - 1);
+    }
+
+    public Set<Checkpoint> getNextCheckpoints(){
+        return questGraph.getChildren(getActiveCheckpoint());
     }
 }

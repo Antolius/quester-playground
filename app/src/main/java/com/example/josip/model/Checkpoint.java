@@ -4,11 +4,12 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.io.File;
+import java.io.Serializable;
 
 /**
  * Created by Josip on 10/08/2014.
  */
-public final class Checkpoint implements Parcelable {
+public final class Checkpoint implements Serializable {
 
     private long id;
     private String name;
@@ -56,30 +57,4 @@ public final class Checkpoint implements Parcelable {
         this.eventsScript = eventsScript;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Checkpoint)) return false;
-
-        Checkpoint that = (Checkpoint) o;
-
-        if (id != that.id) return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        return (int) (id ^ (id >>> 47));
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-
-    }
 }

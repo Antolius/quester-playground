@@ -2,8 +2,6 @@ package com.example.josip.location;
 
 import android.app.Activity;
 import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.location.Location;
@@ -11,10 +9,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.example.josip.gameService.engine.GameEngine;
-import com.example.josip.gameService.engine.impl.GameEngineImpl;
 import com.example.josip.jstest.R;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.location.Geofence;
@@ -24,7 +20,6 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationStatusCodes;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static com.google.android.gms.common.GooglePlayServicesClient.*;
@@ -45,17 +40,10 @@ public class LocationTestActivity extends Activity implements
         locationClient = new LocationClient(this, this, this);
         locationClient.connect();
 
+
+        CheckpointAreaEnteredListener listener = new CheckpointAreaEnteredListener(locationClient, javaScriptEngine, gameStateProvider);
         IntentFilter checkpointEnteredFilter = new IntentFilter("Entered checkpoint area");
-
-        BroadcastReceiver receiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                Log.d("QUESTER", "WAHOOOOO");
-                //locationClient.removeGeofences(new ArrayList<String>(), );
-            }
-        };
-
-        registerReceiver(receiver, checkpointEnteredFilter);
+        registerReceiver(listener, checkpointEnteredFilter);
     }
 
     @Override

@@ -37,13 +37,13 @@ public class GameEngineImpl implements GameEngine {
     }
 
     @Override
-    public void onCheckpointAreaEnter(final Checkpoint checkpoint) {
+    public boolean onCheckpointAreaEnter(final Checkpoint checkpoint) {
 
         String onEnterScript = readFile(checkpoint.getEventsScript());
         if (!onEnterScript.isEmpty()) {
             if (!javaScriptEngine.runEnterScript(onEnterScript)) {
                 //enter event was halted by the onEnterScript
-                return;
+                return false;
             }
         }
 
@@ -57,6 +57,7 @@ public class GameEngineImpl implements GameEngine {
         onUpdateEventsTimer.scheduleAtFixedRate(updateEventTask, ON_UPDATE_DELAY, ON_UPDATE_DELAY);
         aciveUpdateTimerTasks.put(checkpoint, updateEventTask);
 
+        return  true;
     }
 
     @Override

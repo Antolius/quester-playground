@@ -7,7 +7,7 @@ import com.example.josip.model.Checkpoint;
  */
 public interface GameEngine {
 
-    public void onCheckpointAreaEnter(final Checkpoint checkpoint);
+    public boolean onCheckpointAreaEnter(final Checkpoint checkpoint);
 
     public void onCheckpointAreaExit(final Checkpoint checkpoint);
 

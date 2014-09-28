@@ -3,23 +3,21 @@ package com.example.josip.gameService.locationService.impl;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 
 import com.example.josip.gameService.locationService.LocationService;
 import com.example.josip.location.GeofenceIntent;
 import com.example.josip.model.Checkpoint;
-import com.example.josip.model.Point;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.LocationClient;
-import com.google.android.gms.location.LocationListener;
-import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationStatusCodes;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 import static com.google.android.gms.common.GooglePlayServicesClient.ConnectionCallbacks;
 import static com.google.android.gms.common.GooglePlayServicesClient.OnConnectionFailedListener;
@@ -31,20 +29,49 @@ import static com.google.android.gms.location.LocationClient.*;
 public class LocationServiceImpl implements LocationService,
         ConnectionCallbacks,
         OnConnectionFailedListener,
-        LocationListener,
-        OnAddGeofencesResultListener{
+        OnAddGeofencesResultListener,
+        OnRemoveGeofencesResultListener {
 
     private LocationClient locationClient;
+    private Context context;
 
-    public LocationServiceImpl(Context context, ArrayList<Checkpoint> checkpointList) {
+    public LocationServiceImpl(Context context) {
 
-        locationClient = new LocationClient(context, this, this);
+        this.locationClient = new LocationClient(context, this, this);
+        this.context = context;
+    }
 
-        //move to on connected
+    @Override
+    public void start() {
+
+        if (Log.isLoggable("QUESTER", Log.DEBUG)) {
+            Log.d("QUESTER", "Location service started");
+        }
+
+        locationClient.connect();
+    }
+
+    @Override
+    public void stop() {
+
+        if (Log.isLoggable("QUESTER", Log.DEBUG)) {
+            Log.d("QUESTER", "Location service stopped");
+        }
+
+        locationClient.disconnect();
+    }
+
+    @Override
+    public void registerCheckpointAreas(Set<Checkpoint> checkpoints) {
+
+        if (Log.isLoggable("QUESTER", Log.DEBUG)) {
+            Log.d("QUESTER", "Registering checkpint areas");
+        }
+
         List<Geofence> geofences = new ArrayList<Geofence>();
-        for(Checkpoint checkpoint : checkpointList) {
+        for (Checkpoint checkpoint : checkpoints) {
             Geofence geofence = new Geofence.Builder()
-                    .setRequestId(checkpoint.getId()+"")
+                    .setRequestId(checkpoint.getId() + "")
                     .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER)
                     .setCircularRegion(checkpoint.getArea().aproximatingCircle().getCenter().getLatitude(),
                             checkpoint.getArea().aproximatingCircle().getCenter().getLatitude(),
@@ -54,52 +81,68 @@ public class LocationServiceImpl implements LocationService,
             geofences.add(geofence);
         }
 
-        Intent intent = new Intent(context, GeofenceIntent.class);
-        intent.putParcelableArrayListExtra("checkpoints", checkpointList);
-        locationClient.addGeofences(geofences, PendingIntent.getService(context, 0, intent,PendingIntent.FLAG_UPDATE_CURRENT), this);
-    }
-
-    public void start() {
-        locationClient.connect();
-    }
-
-    public void stop() {
-        locationClient.disconnect();
-    }
-
-    public Point getCurrentLocation() {
-        Location location = locationClient.getLastLocation();
-        return new Point(location.getLatitude(), location.getLongitude());
+        ArrayList arrayList = new ArrayList<Checkpoint>();
+        arrayList.addAll(checkpoints);
+        Intent intent = new Intent(context, GeofenceIntent.class).putExtra("checkpoints", arrayList);
+        locationClient.addGeofences(geofences,
+                PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT), this);
     }
 
     @Override
+    public void unregisterCheckpointArea(Checkpoint checkpoint) {
+        locationClient.removeGeofences(Arrays.asList(checkpoint.getId()+""), this);
+    }
+
+
+    @Override
     public void onConnected(Bundle bundle) {
-        Log.d("QUESTER-CONN", "Is connected");
-        locationClient.requestLocationUpdates(
-                LocationRequest.create().setInterval(5000), this);
+
+        if (Log.isLoggable("QUESTER", Log.DEBUG)) {
+            Log.d("QUESTER", "Location service client connected");
+        }
     }
 
     @Override
     public void onDisconnected() {
-        Log.d("QUESTER-CONN", "Is disconnected");
+
+        if (Log.isLoggable("QUESTER", Log.DEBUG)) {
+            Log.d("QUESTER", "Location service client disconnected");
+        }
     }
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
-        Log.d("QUESTER-CONN", "Connecting failed");
-    }
 
-    @Override
-    public void onLocationChanged(Location location) {
-        Log.d("QUESTER", "Location changed" + location);
+        if (Log.isLoggable("QUESTER", Log.WARN)) {
+            Log.w("QUESTER", "Location service client connection failed");
+        }
     }
 
     @Override
     public void onAddGeofencesResult(int statusCode, String[] strings) {
+
         if (LocationStatusCodes.SUCCESS == statusCode) {
-            Log.d("QUESTER", "Added geofences");
+            if (Log.isLoggable("QUESTER", Log.DEBUG)) {
+                Log.d("QUESTER", "Location service, adding geofences succeeded");
+            }
         } else {
-            Log.e("QUESTE", "Adding geofences failed");
+            if (Log.isLoggable("QUESTER", Log.WARN)) {
+                Log.w("QUESTER", "Location service, adding geofences failed");
+            }
+        }
+    }
+
+    @Override
+    public void onRemoveGeofencesByRequestIdsResult(int status, String[] strings) {
+        if (Log.isLoggable("QUESTER", Log.DEBUG)) {
+            Log.d("QUESTER", "Location service, removing geofence");
+        }
+    }
+
+    @Override
+    public void onRemoveGeofencesByPendingIntentResult(int status, PendingIntent pendingIntent) {
+        if (Log.isLoggable("QUESTER", Log.DEBUG)) {
+            Log.d("QUESTER", "Location service, removing geofence");
         }
     }
 }
