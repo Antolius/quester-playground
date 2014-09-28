@@ -2,6 +2,7 @@ package com.example.josip.gameService.engine.impl;
 
 import com.example.josip.gameService.GameContext;
 import com.example.josip.gameService.engine.JavaScriptEngine;
+import com.example.josip.gameService.stateProvider.GameStateProvider;
 
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
@@ -14,11 +15,12 @@ import java.lang.reflect.InvocationTargetException;
  */
 public class JavaScriptEngineImpl implements JavaScriptEngine {
 
-    private GameContext gameContext;
     private Context javaScriptRuntimeContext;
+    private final GameStateProvider gameStateProvider;
 
-    public JavaScriptEngineImpl(GameContext gameContext) {
-        this.gameContext = gameContext;
+    public JavaScriptEngineImpl(GameStateProvider gameStateProvider) {
+
+        this.gameStateProvider = gameStateProvider;
     }
 
     @Override
@@ -52,7 +54,7 @@ public class JavaScriptEngineImpl implements JavaScriptEngine {
         Scriptable scope = javaScriptRuntimeContext.initStandardObjects();
 
         ScriptableObject.defineClass(scope, JavaScriptApiImpl.class);
-        Object[] constructorArguments = {gameContext.getGameStateProvider().getCurrentQuestState(), gameContext.getGameStateProvider().getPersistantGameObject()};
+        Object[] constructorArguments = {gameStateProvider.getCurrentQuestState(), gameStateProvider.getPersistantGameObject()};
         Scriptable javaScriptApi = javaScriptRuntimeContext.newObject(scope, "JavaScriptApiImpl", constructorArguments);
         scope.put("GameContext", scope, javaScriptApi);
 

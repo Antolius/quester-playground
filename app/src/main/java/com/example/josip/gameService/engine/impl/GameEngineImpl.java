@@ -3,6 +3,7 @@ package com.example.josip.gameService.engine.impl;
 import com.example.josip.gameService.GameContext;
 import com.example.josip.gameService.engine.GameEngine;
 import com.example.josip.gameService.engine.JavaScriptEngine;
+import com.example.josip.gameService.stateProvider.GameStateProvider;
 import com.example.josip.model.Checkpoint;
 
 import java.io.BufferedReader;
@@ -21,19 +22,16 @@ public class GameEngineImpl implements GameEngine {
 
     public static final long ON_UPDATE_DELAY = 1000 * 60; //one minute
 
-    private GameContext gameContext;
-
     private Timer onUpdateEventsTimer = new Timer();
 
     private HashMap<Checkpoint, TimerTask> aciveUpdateTimerTasks = new HashMap<Checkpoint, TimerTask>();
 
     private JavaScriptEngine javaScriptEngine;
 
-    public GameEngineImpl(GameContext gameContext) {
-        this.gameContext = gameContext;
+    public GameEngineImpl(GameStateProvider gameStateProvider) {
 
         //TODO: injection!
-        javaScriptEngine = new JavaScriptEngineImpl(gameContext);
+        javaScriptEngine = new JavaScriptEngineImpl(gameStateProvider);
     }
 
     @Override

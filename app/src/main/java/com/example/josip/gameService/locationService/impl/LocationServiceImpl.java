@@ -65,7 +65,7 @@ public class LocationServiceImpl implements LocationService,
     public void registerCheckpointAreas(Set<Checkpoint> checkpoints) {
 
         if (Log.isLoggable("QUESTER", Log.DEBUG)) {
-            Log.d("QUESTER", "Registering checkpint areas");
+            Log.d("QUESTER", "Registering checkpoint areas");
         }
 
         List<Geofence> geofences = new ArrayList<Geofence>();

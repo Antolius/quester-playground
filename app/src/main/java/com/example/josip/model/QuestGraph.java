@@ -1,5 +1,6 @@
 package com.example.josip.model;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -9,7 +10,7 @@ import java.util.Set;
 /**
  * Created by Josip on 10/08/2014!
  */
-public class QuestGraph {
+public class QuestGraph implements Serializable {
 
     private Map<Checkpoint, Set<Checkpoint>> map;
 
@@ -20,7 +21,7 @@ public class QuestGraph {
      * @param checkpoints must not be null nor contain null as an element
      */
     public QuestGraph(Collection<Checkpoint> checkpoints) {
-        if (checkpoints == null || checkpoints.contains(null) ) {
+        if (checkpoints == null || checkpoints.contains(null)) {
             throw new IllegalArgumentException("Collection of checkpoints must not in itself be or contain null.");
         }
 
@@ -49,7 +50,7 @@ public class QuestGraph {
 
     /**
      * @param start must be already contained in Quest Graph
-     * @param end must be already contained in Quest Graph
+     * @param end   must be already contained in Quest Graph
      */
     public void addEdge(Checkpoint start, Checkpoint end) {
         assertCheckpointExists(start);
@@ -60,7 +61,7 @@ public class QuestGraph {
 
     /**
      * @param start must be already contained in Quest Graph
-     * @param end must be already contained in Quest Graph
+     * @param end   must be already contained in Quest Graph
      */
     public void removeEdge(Checkpoint start, Checkpoint end) {
         assertCheckpointExists(start);

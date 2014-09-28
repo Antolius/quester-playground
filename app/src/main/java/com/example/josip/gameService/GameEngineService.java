@@ -7,10 +7,16 @@ import android.os.IBinder;
 import android.util.Log;
 
 import com.example.josip.gameService.engine.GameEngine;
+import com.example.josip.gameService.engine.impl.GameEngineImpl;
 import com.example.josip.gameService.locationService.LocationService;
 import com.example.josip.gameService.locationService.impl.LocationServiceImpl;
 import com.example.josip.gameService.stateProvider.GameStateProvider;
+import com.example.josip.gameService.stateProvider.impl.GameStateProviderImpl;
 import com.example.josip.location.CheckpointAreaEnteredListener;
+import com.example.josip.model.Checkpoint;
+import com.example.josip.model.Quest;
+
+import java.util.ArrayList;
 
 /**
  * Created by tdubravcevic on 10.8.2014!
@@ -21,10 +27,10 @@ public class GameEngineService extends Service {
     private GameStateProvider gameStateProvider;
     private GameEngine gameEngine;
 
-    public GameEngineService(LocationService locationService, GameStateProvider gameStateProvider, GameEngine gameEngine) {
-        this.locationService = locationService;
-        this.gameStateProvider = gameStateProvider;
-        this.gameEngine = gameEngine;
+    public GameEngineService() {
+        this.locationService = new LocationServiceImpl(this);
+        this.gameStateProvider = new GameStateProviderImpl();
+        this.gameEngine = new GameEngineImpl(gameStateProvider);
     }
 
     @Override
@@ -51,6 +57,11 @@ public class GameEngineService extends Service {
         if (Log.isLoggable("QUESTER", Log.DEBUG)) {
             Log.d("QUESTER", "Game engine service started");
         }
+
+        Quest quest = (Quest) intent.getSerializableExtra("quest");
+
+        gameStateProvider.getCurrentQuestState().setQuestGraph(quest.getQuestGraph());
+        gameStateProvider.getCurrentQuestState().setVisitedCheckpoints(new ArrayList<Checkpoint>());
 
         locationService.registerCheckpointAreas(
                 gameStateProvider.getCurrentQuestState().getNextCheckpoints());

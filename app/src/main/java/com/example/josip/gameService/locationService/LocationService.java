@@ -15,5 +15,5 @@ public interface LocationService {
 
     public void registerCheckpointAreas(Set<Checkpoint> checkpoints);
 
-    void unregisterCheckpointArea(Checkpoint checkpoint);
+    public void unregisterCheckpointArea(Checkpoint checkpoint);
 }

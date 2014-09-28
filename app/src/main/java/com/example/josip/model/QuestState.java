@@ -1,5 +1,6 @@
 package com.example.josip.model;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -29,10 +30,22 @@ public class QuestState {
     }
 
     public Checkpoint getActiveCheckpoint () {
+
+        if(visitedCheckpoints.isEmpty()){
+            return null;
+        }
+
         return visitedCheckpoints.get(visitedCheckpoints.size() - 1);
     }
 
     public Set<Checkpoint> getNextCheckpoints(){
+
+        Checkpoint checkpoint = getActiveCheckpoint();
+
+        if(checkpoint == null){
+            return new HashSet<Checkpoint>();
+        }
+
         return questGraph.getChildren(getActiveCheckpoint());
     }
 }
