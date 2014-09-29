@@ -1,11 +1,16 @@
 package com.example.josip.model;
 
-/**
- * Created by Josip on 10/08/2014.
- */
+import org.simpleframework.xml.Attribute;
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.Root;
+
+@Root
 public class Quest {
 
+    @Attribute
     private long id;
+
+    @Element
     private String name;
     private QuestMetaData metaData;
     private QuestGraph questGraph;
