@@ -1,5 +1,8 @@
 package com.example.josip.model;
 
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.ElementMap;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -11,6 +14,7 @@ import java.util.Set;
  */
 public class QuestGraph {
 
+    @ElementMap(entry="property", key="key", attribute=false, inline=false)
     private Map<Checkpoint, Set<Checkpoint>> map;
 
     /**

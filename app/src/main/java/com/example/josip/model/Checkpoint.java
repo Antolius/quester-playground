@@ -1,5 +1,8 @@
 package com.example.josip.model;
 
+import org.simpleframework.xml.Attribute;
+import org.simpleframework.xml.Element;
+
 import java.io.File;
 
 /**
@@ -7,7 +10,10 @@ import java.io.File;
  */
 public final class Checkpoint {
 
+    @Attribute
     private long id;
+
+    @Element
     private String name;
     private CheckpointArea area;
     private File viewHtml;

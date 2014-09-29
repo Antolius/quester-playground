@@ -13,6 +13,8 @@ public class Quest {
     @Element
     private String name;
     private QuestMetaData metaData;
+
+    @Element
     private QuestGraph questGraph;
 
     public long getId() {
