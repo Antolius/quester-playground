@@ -23,5 +23,9 @@ public class GameStateProviderImpl implements GameStateProvider {
         return persistentGameObject;
     }
 
+    @Override
+    public void saveState() {
+        //TODO fancy shit
+    }
 
 }
