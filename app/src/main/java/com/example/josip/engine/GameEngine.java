@@ -27,14 +27,14 @@ public class GameEngine extends Service {
 
         gameStateProvider = new GameStateProviderImpl();
 
-        locationProcessor = new LocationProcessor(new LocationReachedCallback() {
+        locationProcessor = new LocationProcessor(this, new LocationReachedCallback() {
             @Override
             public void locationReached(Checkpoint reachedCheckpoint) {
                 scriptProcessor.processCheckpoint(reachedCheckpoint);
             }
         });
 
-        scriptProcessor = new ScriptProcessor(gameStateProvider.getPersistantGameObject(), new CheckpointVisitedCallback() {
+        scriptProcessor = new ScriptProcessor(gameStateProvider, new CheckpointVisitedCallback() {
             @Override
             public void checkpointVisited(Checkpoint visitedCheckpoint) {
                 gameStateProvider.getCurrentQuestState().getVisitedCheckpoints().add(visitedCheckpoint);
@@ -51,7 +51,14 @@ public class GameEngine extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        locationProcessor.start();
         return super.onStartCommand(intent, flags, startId);
+    }
+
+    @Override
+    public void onDestroy() {
+        locationProcessor.stop();
+        super.onDestroy();
     }
 
     @Override
