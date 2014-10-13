@@ -7,7 +7,10 @@ import com.example.josip.model.Point;
 import com.example.josip.model.Quest;
 import com.example.josip.model.QuestGraph;
 import com.example.josip.model.QuestMetaData;
-import com.example.josip.model.enums.MessurmentUnit;
+import com.example.josip.model.enums.MeasurementUnit;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -64,7 +67,7 @@ public class QuestProvider {
             }
 
             @Override
-            public double distanceFrom(Point point, MessurmentUnit messurmentUnit) {
+            public double distanceFrom(Point point, MeasurementUnit messurmentUnit) {
                 return 100;
             }
 
@@ -76,6 +79,11 @@ public class QuestProvider {
                 circle.setRadius(random.nextDouble());
 
                 return circle;
+            }
+
+            @Override
+            public JSONObject getJsonData() throws JSONException {
+                return null;
             }
         });
 
