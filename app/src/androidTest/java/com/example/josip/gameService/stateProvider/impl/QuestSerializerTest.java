@@ -11,12 +11,10 @@ import org.json.JSONException;
 
 import static com.example.josip.model.enums.CircleArea.*;
 
-/**
- * Created by tdubravcevic on 13.10.2014!
- */
+
 public class QuestSerializerTest extends AndroidTestCase {
 
-    public void testSerilaizeQuestAndDeserializeIt() throws JSONException {
+    public void testSerializeQuestAndDeserializeIt() throws JSONException {
 
         Checkpoint checkpointA =
                 new CheckpointBuilder(1L)
