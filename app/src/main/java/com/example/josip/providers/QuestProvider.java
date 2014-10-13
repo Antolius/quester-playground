@@ -67,7 +67,7 @@ public class QuestProvider {
             }
 
             @Override
-            public double distanceFrom(Point point, MeasurementUnit messurmentUnit) {
+            public double distanceFrom(Point point, MeasurementUnit measurementUnit) {
                 return 100;
             }
 

@@ -21,22 +21,32 @@ public class QuestSerializer {
 
     public String serialize(Quest quest) throws JSONException {
 
-        JSONArray array = new JSONArray();
+        JSONObject questJsonObject = new JSONObject();
+        questJsonObject.put("id", quest.getId());
+        questJsonObject.put("name", quest.getName());
+        questJsonObject.put("graph", getCheckpointJsonArray(quest));
 
+        return questJsonObject.toString();
+    }
+
+    private JSONArray getCheckpointJsonArray(Quest quest) throws JSONException {
+        JSONArray checkpointObjectsArray = new JSONArray();
         QuestGraph questGraph = quest.getQuestGraph();
-
         for (Checkpoint checkpoint : questGraph.getAllCheckpoints()) {
-            JSONObject jsonCheckpointObject = new JSONObject();
-            jsonCheckpointObject.put("id", checkpoint.getId());
-            jsonCheckpointObject.put("name", checkpoint.getName());
-            jsonCheckpointObject.put("area", getAreaAsJson(checkpoint));
-            //jsonCheckpointObject.put("scripts", checkpoint.getEventsScript().getAbsolutePath());
-            //jsonCheckpointObject.put("html", checkpoint.getViewHtml().getAbsolutePath());
-            jsonCheckpointObject.put("children", getChildren(questGraph, checkpoint));
-            array.put(jsonCheckpointObject);
+            checkpointObjectsArray.put(getCheckpointJsonObject(questGraph, checkpoint));
         }
+        return checkpointObjectsArray;
+    }
 
-        return array.toString();
+    private JSONObject getCheckpointJsonObject(QuestGraph questGraph, Checkpoint checkpoint) throws JSONException {
+        JSONObject jsonCheckpointObject = new JSONObject();
+        jsonCheckpointObject.put("id", checkpoint.getId());
+        jsonCheckpointObject.put("name", checkpoint.getName());
+        jsonCheckpointObject.put("area", getAreaAsJson(checkpoint));
+        //jsonCheckpointObject.put("scripts", checkpoint.getEventsScript().getAbsolutePath());
+        //jsonCheckpointObject.put("html", checkpoint.getViewHtml().getAbsolutePath());
+        jsonCheckpointObject.put("children", getChildren(questGraph, checkpoint));
+        return jsonCheckpointObject;
     }
 
     private JSONArray getChildren(QuestGraph questGraph, Checkpoint checkpoint) {
@@ -59,7 +69,9 @@ public class QuestSerializer {
 
     public Quest deserialize(String json) throws JSONException {
 
-        JSONArray array = new JSONArray(json);
+        JSONObject questJsonObject = new JSONObject(json);
+
+        JSONArray array = questJsonObject.getJSONArray("graph");
 
         Map<Long, Checkpoint> checkpointIdMap = new HashMap<Long, Checkpoint>();
 
@@ -89,6 +101,8 @@ public class QuestSerializer {
         }
 
         Quest quest = new Quest();
+        quest.setId(questJsonObject.getLong("id"));
+        quest.setName(questJsonObject.getString("name"));
         quest.setQuestGraph(graph);
         return quest;
     }

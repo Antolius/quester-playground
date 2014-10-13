@@ -50,4 +50,35 @@ public class CircleArea implements CheckpointArea {
                 .put("latitude", circle.getCenter().getLatitude())
                 .put("longitude", circle.getCenter().getLongitude());
     }
+
+    public static class CircleAreaBuilder {
+
+        private Circle circle;
+        private Point center;
+
+        public CircleAreaBuilder() {
+            this.circle = new Circle();
+            this.center = new Point(0.0, 0.0);
+        }
+
+        public CircleAreaBuilder centerLatitude(Double centerLatitude) {
+            center.setLatitude(centerLatitude);
+            return this;
+        }
+
+        public CircleAreaBuilder centerLongitude(Double centerLongitude) {
+            center.setLongitude(centerLongitude);
+            return this;
+        }
+
+        public CircleAreaBuilder radius(Double radius){
+            circle.setRadius(radius);
+            return this;
+        }
+
+        public CircleArea build() {
+            circle.setCenter(center);
+            return new CircleArea(circle);
+        }
+    }
 }
