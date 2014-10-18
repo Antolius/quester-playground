@@ -33,6 +33,14 @@ public final class Checkpoint implements Parcelable{
     public Checkpoint() {
     }
 
+    public Checkpoint(Checkpoint checkpoint){
+        this.id = checkpoint.getId();
+        this.name = checkpoint.getName();
+        this.area = checkpoint.getArea();
+        this.viewHtml = checkpoint.getViewHtml();
+        this.eventsScript = checkpoint.getEventsScript();
+    }
+
     public long getId() {
         return id;
     }
@@ -89,18 +97,17 @@ public final class Checkpoint implements Parcelable{
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Checkpoint)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
 
         Checkpoint that = (Checkpoint) o;
 
-        if (id != that.id) return false;
+        return id == that.id;
 
-        return true;
     }
 
     @Override
     public int hashCode() {
-        return (int) (id ^ (id >>> 47));
+        return (int) (id ^ (id >>> 32));
     }
 
     private Checkpoint(Parcel source) {

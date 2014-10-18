@@ -1,24 +1,23 @@
 package com.example.josip.jstest.activities;
 
-import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.os.Messenger;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.josip.QExample;
-import com.example.josip.gameService.GameEngineService;
 import com.example.josip.jstest.R;
+import com.example.josip.model.Checkpoint;
+import com.example.josip.model.CheckpointBuilder;
+import com.example.josip.model.Quest;
+import com.example.josip.model.QuestBuilder;
+import com.example.josip.model.enums.CircleArea;
+import com.example.josip.providers.QuestRepository;
 import com.mysema.query.sql.SQLQuery;
 import com.mysema.query.sql.SQLQueryImpl;
 import com.mysema.query.sql.SQLTemplates;
@@ -53,8 +52,8 @@ public class MyActivity extends InjectionActivity {
         setContentView(R.layout.activity_my);
         initViewComponents();
 
-        experimentWithDatabase();
-
+        experiment2();
+        /*
         useLocationManager();
 
         final Intent mapActivityIntent = new Intent(this, MapBrowseActivity.class);
@@ -88,6 +87,7 @@ public class MyActivity extends InjectionActivity {
                 startActivity(mapActivityIntent);
             }
         });
+        */
     }
 
     @Override
@@ -117,6 +117,65 @@ public class MyActivity extends InjectionActivity {
 
         latitudeText = (TextView) findViewById(R.id.latitude);
         longitudeText = (TextView) findViewById(R.id.longitude);
+    }
+
+    private void experiment2() {
+
+        SQLiteDatabase db = openOrCreateDatabase("test", 0, null);
+        db.delete("quests", null, null);
+        db.delete("connections", null, null);
+        db.delete("checkpoints", null, null);
+        ContextHolder.setContext(this);
+        Flyway flyway = new Flyway();
+        flyway.setDataSource("jdbc:sqlite:" + db.getPath(), "", "");
+        flyway.migrate();
+
+        Checkpoint checkpointA =
+                new CheckpointBuilder(-1L)
+                        .name("A")
+                        .area(new CircleArea.CircleAreaBuilder()
+                                .centerLatitude(0.1)
+                                .centerLongitude(0.1)
+                                .radius(1.0)
+                                .build())
+                        .build();
+
+        Checkpoint checkpointB =
+                new CheckpointBuilder(-2L)
+                        .name("B")
+                        .area(new CircleArea.CircleAreaBuilder()
+                                .centerLatitude(2.0)
+                                .centerLongitude(2.0)
+                                .radius(1.0)
+                                .build())
+                        .build();
+
+        Quest quest = new QuestBuilder("testQuest")
+                .addCheckpoint(checkpointA)
+                .addCheckpoint(checkpointB)
+                .addConnection(checkpointA, checkpointB)
+                .build();
+
+        QuestRepository databaseProvider = new QuestRepository(db);
+
+        quest = databaseProvider.persistQuest(quest);
+        Quest returnedQuest = databaseProvider.queryQuest(quest.getId());
+
+        logger.info(returnedQuest.getName());
+
+        /*
+        ContentValues values = new ContentValues();
+        values.put("example_id", 3);
+        values.put("name", "perica");
+        db.insert("Example", null, values);
+
+        String[] projection = {"example_id", "name"};
+        String[] selectionArgs = {"3"};
+        Cursor cursor = db.query("Example", projection, "example_id=?", selectionArgs, null, null, null);
+
+        cursor.moveToFirst();
+        logger.info(cursor.getString(cursor.getColumnIndex("name")));
+        */
     }
 
     private void experimentWithDatabase() {

@@ -71,7 +71,12 @@ public class QuestGraph {
 
 
     private void assertCheckpointExists(Checkpoint checkpoint) throws IllegalArgumentException {
-        if (!map.containsKey(checkpoint)) {
+
+        Set<Checkpoint> checkpoints = map.keySet();
+        boolean a = checkpoints.contains(checkpoint);
+        boolean b = map.containsKey(checkpoint);
+
+        if (!a && !b) {
             throw new IllegalArgumentException("Checkpoint does not exist in quest graph");
         }
     }
