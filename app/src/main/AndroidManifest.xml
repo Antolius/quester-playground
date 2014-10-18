@@ -35,6 +35,11 @@
         <activity
             android:name=".activities.MyActivity"
             android:label="@string/app_name" >
+        </activity>
+
+        <activity
+            android:name="com.example.josip.location.LocationTestActivity"
+            android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -58,6 +63,20 @@
             android:label="Test service"
             >
         </service>
+
+        <service
+            android:name="com.example.josip.location.SendMockLocationService"
+            android:icon="@drawable/ic_launcher"
+            android:label="Location test service" >
+        </service>
+
+        <service
+            android:name="com.example.josip.engine.location.GeofenceIntentService"
+            android:label="@string/app_name"
+            android:exported="false">
+        </service>
+
+
     </application>
 
 </manifest>
