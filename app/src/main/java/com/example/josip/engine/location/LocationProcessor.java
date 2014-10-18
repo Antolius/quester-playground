@@ -4,6 +4,7 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -12,6 +13,8 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.LocationClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +52,7 @@ public class LocationProcessor extends BroadcastReceiver implements
             Log.d("QUESTER", "Location service started");
         }
 
-        this. rootCheckpoints = rootCheckpoints;
+        this.rootCheckpoints = rootCheckpoints;
         locationClient.connect();
     }
 
@@ -67,6 +70,8 @@ public class LocationProcessor extends BroadcastReceiver implements
         Checkpoint triggeringCheckpoint = intent.getParcelableExtra(CHECKPOINT_EXTRA_ID);
         locationReachedCallback.locationReached(triggeringCheckpoint);
     }
+
+
 
     public void trackLocation(Set<Checkpoint> checkpoints) {
 
@@ -104,6 +109,14 @@ public class LocationProcessor extends BroadcastReceiver implements
     @Override
     public void onConnected(Bundle bundle) {
         trackLocation(rootCheckpoints);
+
+        locationClient.requestLocationUpdates(LocationRequest.create().setInterval(10), new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+                Log.d("Quester", location.toString());
+            }
+        });
+
     }
 
     @Override
@@ -113,7 +126,8 @@ public class LocationProcessor extends BroadcastReceiver implements
 
     @Override
     public void onAddGeofencesResult(int i, String[] strings) {
-
+        int length = strings.length;
+        length++;
     }
 
     @Override

@@ -1,14 +1,15 @@
 package com.example.josip.engine;
 
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
+import android.widget.Toast;
 
 import com.example.josip.engine.location.LocationProcessor;
 import com.example.josip.engine.location.LocationReachedCallback;
 import com.example.josip.engine.script.CheckpointVisitedCallback;
 import com.example.josip.engine.script.ScriptProcessor;
-import com.example.josip.gameService.stateProvider.GameStateProvider;
 import com.example.josip.gameService.stateProvider.impl.GameStateProviderImpl;
 import com.example.josip.model.Checkpoint;
 import com.example.josip.model.QuestGraphUtils;
@@ -25,9 +26,12 @@ public class GameEngine extends Service {
 
     private GameStateProviderImpl gameStateProvider;
 
+    private Context context;
+
     @Override
     public void onCreate() {
 
+        this.context = this;
         gameStateProvider = new GameStateProviderImpl();
         gameStateProvider.questState = new QuestState(MockedQuestProvider.getMockedQuest(this).getQuestGraph());
 
@@ -41,6 +45,9 @@ public class GameEngine extends Service {
         scriptProcessor = new ScriptProcessor(gameStateProvider, new CheckpointVisitedCallback() {
             @Override
             public void checkpointVisited(Checkpoint visitedCheckpoint) {
+
+                Toast.makeText(context, "Visited checkpoint" + visitedCheckpoint.getName(), Toast.LENGTH_LONG).show();
+
                 gameStateProvider.getCurrentQuestState().getVisitedCheckpoints().add(visitedCheckpoint);
                 locationProcessor.trackLocation(gameStateProvider.getCurrentQuestState().getQuestGraph().getChildren(visitedCheckpoint));
 

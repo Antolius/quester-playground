@@ -23,28 +23,60 @@ public class MockedQuestProvider {
         Checkpoint a = new CheckpointBuilder(1L)
                 .name("checkpoint 1")
                 .isRoot(true)
-                .eventScript(writeFile(context, "eventScript1.js", ""))
+                .eventScript(writeFile(context, "eventScript1.js", "var onEnter(arg){return true;}"))
                 .viewHtml(writeFile(context, "view1.html", ""))
                 .area(new CircleArea.CircleAreaBuilder()
-                                .centerLatitude(1.0)
-                                .centerLongitude(1.0)
-                                .radius(1.0)
+                                .centerLatitude(45.777100)
+                                .centerLongitude(15.971920)
+                                .radius(100.0)
                                 .build()
                 ).build();
 
         Checkpoint b = new CheckpointBuilder(2L)
                 .name("checkpoint 2")
                 .isRoot(false)
-                .eventScript(writeFile(context, "eventScript2.js", ""))
+                .eventScript(writeFile(context, "eventScript2.js", "var onEnter(arg){return true;}"))
                 .viewHtml(writeFile(context, "view2.html", ""))
                 .area(new CircleArea.CircleAreaBuilder()
-                                .centerLatitude(10.0)
-                                .centerLongitude(10.0)
-                                .radius(1.0)
+                                .centerLatitude(45.777197)
+                                .centerLongitude(15.974506)
+                                .radius(100.0)
                                 .build()
                 ).build();
 
-        return questBuilder.addCheckpoint(a).addCheckpoint(b).addConnection(a, b).build();
+        Checkpoint c = new CheckpointBuilder(2L)
+                .name("checkpoint 2")
+                .isRoot(false)
+                .eventScript(writeFile(context, "eventScript3.js", "var onEnter(arg){return true;}"))
+                .viewHtml(writeFile(context, "view3.html", ""))
+                .area(new CircleArea.CircleAreaBuilder()
+                                .centerLatitude(45.777218)
+                                .centerLongitude(15.977681)
+                                .radius(100.0)
+                                .build()
+                ).build();
+
+        Checkpoint d = new CheckpointBuilder(4L)
+                .name("checkpoint 4")
+                .isRoot(false)
+                .eventScript(writeFile(context, "eventScript4.js", "var onEnter(arg){return true;}"))
+                .viewHtml(writeFile(context, "view4.html", ""))
+                .area(new CircleArea.CircleAreaBuilder()
+                                .centerLatitude(45.777053)
+                                .centerLongitude(15.979677)
+                                .radius(100.0)
+                                .build()
+                ).build();
+
+        return questBuilder
+                .addCheckpoint(a)
+                .addCheckpoint(b)
+                .addCheckpoint(c)
+                .addCheckpoint(d)
+                .addConnection(a, b)
+                .addConnection(b, c)
+                .addConnection(c, d)
+                .build();
 
     }
 

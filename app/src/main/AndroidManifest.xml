@@ -65,6 +65,13 @@
         </service>
 
         <service
+            android:name="com.example.josip.engine.GameEngine"
+            android:icon="@drawable/ic_launcher"
+            android:label="Game engine"
+            >
+        </service>
+
+        <service
             android:name="com.example.josip.location.SendMockLocationService"
             android:icon="@drawable/ic_launcher"
             android:label="Location test service" >

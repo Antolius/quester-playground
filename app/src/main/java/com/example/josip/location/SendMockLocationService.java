@@ -71,7 +71,7 @@ public class SendMockLocationService extends Service implements
             locationClient.setMockLocation(mockLocation);
 
             try {
-                Thread.sleep((long) (5000));
+                Thread.sleep((long) (1000));
             } catch (InterruptedException e) {
                 return ;
             }
