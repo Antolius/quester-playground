@@ -17,6 +17,7 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION"/>
 
     <application
         android:name=".MyApplication"
@@ -58,16 +59,9 @@
         </activity>
 
         <service
-            android:name="com.example.josip.gameService.GameEngineService"
-            android:icon="@drawable/ic_launcher"
-            android:label="Test service"
-            >
-        </service>
-
-        <service
             android:name="com.example.josip.engine.GameEngine"
             android:icon="@drawable/ic_launcher"
-            android:label="Game engine"
+            android:label="Test service"
             >
         </service>
 

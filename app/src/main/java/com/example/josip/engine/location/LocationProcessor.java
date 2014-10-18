@@ -72,7 +72,6 @@ public class LocationProcessor extends BroadcastReceiver implements
     }
 
 
-
     public void trackLocation(Set<Checkpoint> checkpoints) {
 
         if (Log.isLoggable("QUESTER", Log.DEBUG)) {
@@ -86,7 +85,8 @@ public class LocationProcessor extends BroadcastReceiver implements
                         0,
                         new Intent(context, GeofenceIntentService.class).putParcelableArrayListExtra(CHECKPOINTS_ARRAY_LIST_EXTRA_ID, new ArrayList<Checkpoint>(checkpoints)),
                         PendingIntent.FLAG_UPDATE_CURRENT),
-                        this);
+                this
+        );
     }
 
     private List<Geofence> buildGeofences(Set<Checkpoint> checkpoints) {
@@ -108,40 +108,46 @@ public class LocationProcessor extends BroadcastReceiver implements
 
     @Override
     public void onConnected(Bundle bundle) {
+
         trackLocation(rootCheckpoints);
 
-        locationClient.requestLocationUpdates(LocationRequest.create().setInterval(10), new LocationListener() {
-            @Override
-            public void onLocationChanged(Location location) {
-                Log.d("Quester", location.toString());
-            }
-        });
+        locationClient.requestLocationUpdates(
+                LocationRequest.create()
+                        .setInterval(5000)
+                        .setFastestInterval(1000)
+                        .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY),
+                new LocationListener() {
+                    @Override
+                    public void onLocationChanged(Location location) {
+                        Log.d("QUESTER", location.toString());
+                    }
+                }
+        );
 
     }
 
     @Override
     public void onDisconnected() {
-
+        Log.d("QUESTER", "client disconnected");
     }
 
     @Override
     public void onAddGeofencesResult(int i, String[] strings) {
-        int length = strings.length;
-        length++;
+        Log.d("QUESTER", "geofences result " + strings);
     }
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
-
+        Log.e("QUESTER", "connection failed");
     }
 
     @Override
     public void onRemoveGeofencesByRequestIdsResult(int i, String[] strings) {
-
+        Log.d("QUESTER", "geofences removed");
     }
 
     @Override
     public void onRemoveGeofencesByPendingIntentResult(int i, PendingIntent pendingIntent) {
-
+        Log.d("QUESTER", "geofences removed");
     }
 }

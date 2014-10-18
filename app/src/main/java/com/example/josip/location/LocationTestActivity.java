@@ -15,15 +15,13 @@ import com.google.android.gms.location.LocationClient;
 
 public class LocationTestActivity extends Activity {
 
-    private LocationClient locationClient;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_location_test);
 
-        //Intent sendMockLocationServiceIntent = new Intent(this, SendMockLocationService.class);
-        //startService(sendMockLocationServiceIntent);
+        Intent sendMockLocationServiceIntent = new Intent(this, SendMockLocationService.class);
+        startService(sendMockLocationServiceIntent);
 
         Intent gameEngineServiceIntent = new Intent(this, GameEngine.class);
         startService(gameEngineServiceIntent);
