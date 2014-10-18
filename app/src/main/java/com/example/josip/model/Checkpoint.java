@@ -4,19 +4,11 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.io.File;
-import java.io.FileDescriptor;
-import java.io.Serializable;
 
 /**
  * Created by Josip on 10/08/2014.
  */
-public final class Checkpoint implements Parcelable{
-
-    private long id;
-    private String name;
-    private CheckpointArea area;
-    private File viewHtml;
-    private File eventsScript;
+public final class Checkpoint implements Parcelable {
 
     public static Creator<Checkpoint> CREATOR = new Creator<Checkpoint>() {
         @Override
@@ -29,16 +21,31 @@ public final class Checkpoint implements Parcelable{
             return new Checkpoint[size];
         }
     };
+    private long id;
+    private String name;
+    private boolean isRoot;
+    private CheckpointArea area;
+    private File viewHtml;
+    private File eventsScript;
 
     public Checkpoint() {
     }
 
-    public Checkpoint(Checkpoint checkpoint){
+    public Checkpoint(Checkpoint checkpoint) {
         this.id = checkpoint.getId();
         this.name = checkpoint.getName();
+        this.isRoot = checkpoint.isRoot();
         this.area = checkpoint.getArea();
         this.viewHtml = checkpoint.getViewHtml();
         this.eventsScript = checkpoint.getEventsScript();
+    }
+
+    private Checkpoint(Parcel source) {
+        this.id = source.readLong();
+        this.name = source.readString();
+        this.isRoot = source.readInt() != 0;
+        this.viewHtml = new File(source.readString());
+        this.eventsScript = new File(source.readString());
     }
 
     public long getId() {
@@ -55,6 +62,14 @@ public final class Checkpoint implements Parcelable{
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public boolean isRoot() {
+        return isRoot;
+    }
+
+    public void setRoot(boolean isRoot) {
+        this.isRoot = isRoot;
     }
 
     public CheckpointArea getArea() {
@@ -90,6 +105,7 @@ public final class Checkpoint implements Parcelable{
     public void writeToParcel(Parcel destination, int flags) {
         destination.writeLong(getId());
         destination.writeString(getName());
+        destination.writeInt(isRoot() ? 1 : 0);
         destination.writeString(getViewHtml().getAbsolutePath());
         destination.writeString(getEventsScript().getAbsolutePath());
     }
@@ -97,23 +113,17 @@ public final class Checkpoint implements Parcelable{
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (o == null) return false;
 
         Checkpoint that = (Checkpoint) o;
 
-        return id == that.id;
+        if (id != that.id) return false;
 
+        return true;
     }
 
     @Override
     public int hashCode() {
         return (int) (id ^ (id >>> 32));
-    }
-
-    private Checkpoint(Parcel source) {
-        this.id = source.readLong();
-        this.name = source.readString();
-        this.viewHtml = new File(source.readString());
-        this.eventsScript = new File(source.readString());
     }
 }

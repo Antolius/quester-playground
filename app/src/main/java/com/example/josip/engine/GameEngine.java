@@ -51,7 +51,10 @@ public class GameEngine extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        locationProcessor.start();
+
+
+
+        locationProcessor.start(null);
         return super.onStartCommand(intent, flags, startId);
     }
 

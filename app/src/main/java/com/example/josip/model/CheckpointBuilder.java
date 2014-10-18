@@ -1,5 +1,7 @@
 package com.example.josip.model;
 
+import java.io.File;
+
 /**
  * Created by tdubravcevic on 13.10.2014!
  */
@@ -27,8 +29,23 @@ public class CheckpointBuilder {
         return this;
     }
 
+    public CheckpointBuilder isRoot(boolean isRoot) {
+        checkpoint.setRoot(isRoot);
+        return this;
+    }
+
     public CheckpointBuilder area(CheckpointArea area){
         checkpoint.setArea(area);
+        return this;
+    }
+
+    public  CheckpointBuilder viewHtml(File viewHtml) {
+        checkpoint.setViewHtml(viewHtml);
+        return this;
+    }
+
+    public CheckpointBuilder eventScript(File eventScript) {
+        checkpoint.setEventsScript(eventScript);
         return this;
     }
 

@@ -6,7 +6,7 @@ CREATE TABLE quests(
 CREATE TABLE checkpoints(
    id            INTEGER PRIMARY KEY   NOT NULL,
    quest_id      INTEGER   NOT NULL,
-   name           TEXT     NOT NULL
+   name          TEXT     NOT NULL
 );
 
 CREATE TABLE connections(

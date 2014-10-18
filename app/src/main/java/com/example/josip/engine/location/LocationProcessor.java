@@ -34,6 +34,8 @@ public class LocationProcessor extends BroadcastReceiver implements
 
     private LocationReachedCallback locationReachedCallback;
 
+    private Set<Checkpoint> rootCheckpoints;
+
     public LocationProcessor(Context context, LocationReachedCallback locationReachedCallback) {
         this.context = context;
         this.locationReachedCallback = locationReachedCallback;
@@ -41,12 +43,13 @@ public class LocationProcessor extends BroadcastReceiver implements
         this.locationClient = new LocationClient(context, this, this);
     }
 
-    public void start() {
+    public void start(Set<Checkpoint> rootCheckpoints) {
 
         if (Log.isLoggable("QUESTER", Log.DEBUG)) {
             Log.d("QUESTER", "Location service started");
         }
 
+        this. rootCheckpoints = rootCheckpoints;
         locationClient.connect();
     }
 
@@ -100,7 +103,7 @@ public class LocationProcessor extends BroadcastReceiver implements
 
     @Override
     public void onConnected(Bundle bundle) {
-
+        trackLocation(rootCheckpoints);
     }
 
     @Override
