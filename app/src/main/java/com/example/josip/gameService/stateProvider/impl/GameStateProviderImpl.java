@@ -9,9 +9,9 @@ import com.example.josip.model.QuestState;
  */
 public class GameStateProviderImpl implements GameStateProvider {
 
-    private QuestState questState;
+    public QuestState questState;
 
-    private PersistentGameObject persistentGameObject;
+    public PersistentGameObject persistentGameObject;
 
     @Override
     public QuestState getCurrentQuestState() {

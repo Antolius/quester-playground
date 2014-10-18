@@ -25,8 +25,6 @@ public class LocationTestActivity extends Activity {
         Intent sendMockLocationServiceIntent = new Intent(this, SendMockLocationService.class);
         startService(sendMockLocationServiceIntent);
 
-        Quest quest = null;
-
         Intent gameEngineServiceIntent = new Intent(this, GameEngine.class);
         startService(gameEngineServiceIntent);
     }

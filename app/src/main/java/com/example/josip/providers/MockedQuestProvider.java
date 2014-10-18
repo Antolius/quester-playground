@@ -38,8 +38,8 @@ public class MockedQuestProvider {
                 .eventScript(writeFile(context, "eventScript2.js", ""))
                 .viewHtml(writeFile(context, "view2.html", ""))
                 .area(new CircleArea.CircleAreaBuilder()
-                                .centerLatitude(1.0)
-                                .centerLongitude(1.0)
+                                .centerLatitude(10.0)
+                                .centerLongitude(10.0)
                                 .radius(1.0)
                                 .build()
                 ).build();

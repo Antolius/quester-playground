@@ -1,5 +1,6 @@
 package com.example.josip.model;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -10,6 +11,14 @@ public class QuestState {
 
     private QuestGraph questGraph;
     private List<Checkpoint> visitedCheckpoints;
+
+    public  QuestState() {
+    }
+
+    public QuestState(QuestGraph questGraph) {
+        this.questGraph = questGraph;
+        this.visitedCheckpoints = new LinkedList<Checkpoint>();
+    }
 
     public QuestGraph getQuestGraph() {
         return questGraph;
