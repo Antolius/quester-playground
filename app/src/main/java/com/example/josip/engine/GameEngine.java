@@ -10,7 +10,7 @@ import com.example.josip.engine.location.LocationProcessor;
 import com.example.josip.engine.location.LocationReachedCallback;
 import com.example.josip.engine.script.CheckpointVisitedCallback;
 import com.example.josip.engine.script.ScriptProcessor;
-import com.example.josip.gameService.stateProvider.impl.GameStateProviderImpl;
+import com.example.josip.engine.state.GameStateProviderImpl;
 import com.example.josip.model.Checkpoint;
 import com.example.josip.model.QuestGraphUtils;
 import com.example.josip.model.QuestState;

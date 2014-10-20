@@ -1,4 +1,4 @@
-package com.example.josip.gameService.engine.impl;
+package com.example.josip.jstest;
 
 import com.example.josip.model.Checkpoint;
 import com.example.josip.model.PersistentGameObject;
@@ -7,11 +7,8 @@ import com.example.josip.model.QuestState;
 import org.mozilla.javascript.ScriptableObject;
 import org.mozilla.javascript.annotations.JSConstructor;
 import org.mozilla.javascript.annotations.JSFunction;
-import org.mozilla.javascript.annotations.JSGetter;
-import org.mozilla.javascript.annotations.JSStaticFunction;
 
 import java.util.Collection;
-import java.util.Objects;
 
 /**
  * Created by Josip on 12/08/2014!

@@ -1,4 +1,4 @@
-package com.example.josip.gameService.stateProvider.impl;
+package com.example.josip.providers;
 
 import android.content.Context;
 

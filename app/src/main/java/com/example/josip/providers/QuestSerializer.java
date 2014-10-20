@@ -1,4 +1,4 @@
-package com.example.josip.gameService.stateProvider.impl;
+package com.example.josip.providers;
 
 import com.example.josip.model.Checkpoint;
 import com.example.josip.model.CheckpointArea;

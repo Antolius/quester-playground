@@ -2,6 +2,8 @@ package com.example.josip.jstest;
 
 import android.test.AndroidTestCase;
 
+import com.example.josip.engine.script.JavaScriptEngine;
+
 public class JSEngineTest extends AndroidTestCase {
 
     public void testTest(){

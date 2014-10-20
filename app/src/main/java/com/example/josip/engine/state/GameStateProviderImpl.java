@@ -1,6 +1,5 @@
-package com.example.josip.gameService.stateProvider.impl;
+package com.example.josip.engine.state;
 
-import com.example.josip.gameService.stateProvider.GameStateProvider;
 import com.example.josip.model.PersistentGameObject;
 import com.example.josip.model.QuestState;
 

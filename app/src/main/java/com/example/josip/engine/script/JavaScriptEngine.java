@@ -1,4 +1,4 @@
-package com.example.josip.jstest;
+package com.example.josip.engine.script;
 
 import com.example.josip.model.PersistentGameObject;
 

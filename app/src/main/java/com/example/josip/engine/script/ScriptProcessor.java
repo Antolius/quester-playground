@@ -2,9 +2,8 @@ package com.example.josip.engine.script;
 
 import android.util.Log;
 
-import com.example.josip.gameService.engine.impl.JavaScriptApiImpl;
-import com.example.josip.gameService.stateProvider.GameStateProvider;
-import com.example.josip.jstest.JavaScriptEngine;
+import com.example.josip.jstest.JavaScriptApiImpl;
+import com.example.josip.engine.state.GameStateProvider;
 import com.example.josip.model.Checkpoint;
 import com.example.josip.model.PersistentGameObject;
 
@@ -29,8 +28,6 @@ public class ScriptProcessor {
     private GameStateProvider gameStateProvider;
     private CheckpointVisitedCallback checkpointVisitedCallback;
 
-    private Context javaScriptRuntimeContext;
-
     public ScriptProcessor(GameStateProvider gameStateProvider, CheckpointVisitedCallback checkpointVisitedCallback) {
         this.gameStateProvider = gameStateProvider;
         this.checkpointVisitedCallback = checkpointVisitedCallback;
@@ -40,8 +37,6 @@ public class ScriptProcessor {
         if (reachedCheckpoint.getEventsScript() == null) {
             return;
         }
-
-        initJavaScriptRuntimeContext();
 
         JavaScriptEngine javaScriptEngine = new JavaScriptEngine(new PersistentGameObject());
         try {
@@ -67,56 +62,6 @@ public class ScriptProcessor {
         */
     }
 
-    private String loadScript(File scriptFile) throws FileNotFoundException {
-        StringBuilder stringBuilder = new StringBuilder((int)scriptFile.length());
-        Scanner scanner = new Scanner(scriptFile);
-        String lineSeparator = System.getProperty("line.separator");
-
-        try {
-            while(scanner.hasNextLine()) {
-                stringBuilder.append(scanner.nextLine() + lineSeparator);
-            }
-            return stringBuilder.toString();
-        } finally {
-            scanner.close();
-        }
-    }
-
-    private void initJavaScriptRuntimeContext() {
-        javaScriptRuntimeContext = Context.enter();
-        javaScriptRuntimeContext.setOptimizationLevel(-1);
-    }
-
-    private boolean evaluateScript(String script, String scriptTag) {
-        //TODO: handle exceptions!
-        try {
-            Scriptable scope = getScope();
-
-            Object result = javaScriptRuntimeContext.evaluateString(scope, script, scriptTag, 1, null);
-            return Context.toBoolean(result);
-
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
-
-        return true;
-    }
-
-    private Scriptable getScope() throws IllegalAccessException, InvocationTargetException, InstantiationException {
-        Scriptable scope = javaScriptRuntimeContext.initStandardObjects();
-
-        ScriptableObject.defineClass(scope, JavaScriptApiImpl.class);
-        Object[] constructorArguments = {gameStateProvider.getCurrentQuestState(), gameStateProvider.getPersistantGameObject()};
-        Scriptable javaScriptApi = javaScriptRuntimeContext.newObject(scope, "JavaScriptApiImpl", constructorArguments);
-        scope.put("GameContext", scope, javaScriptApi);
-
-        return scope;
-    }
-
     private String readFromFile(File file) {
         StringBuilder returnString = new StringBuilder();
         InputStream fIn = null;
@@ -127,7 +72,7 @@ public class ScriptProcessor {
             fIn = new FileInputStream(file);
             isr = new InputStreamReader(fIn);
             input = new BufferedReader(isr);
-            String line = "";
+            String line;
             while ((line = input.readLine()) != null) {
                 returnString.append(line);
             }
@@ -147,6 +92,5 @@ public class ScriptProcessor {
         }
         return returnString.toString();
     }
-
 
 }

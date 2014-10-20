@@ -6,6 +6,7 @@ import com.example.josip.model.Checkpoint;
 import com.example.josip.model.CheckpointBuilder;
 import com.example.josip.model.Quest;
 import com.example.josip.model.QuestBuilder;
+import com.example.josip.providers.QuestSerializer;
 
 import org.json.JSONException;
 

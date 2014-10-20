@@ -1,4 +1,4 @@
-package com.example.josip.gameService.stateProvider;
+package com.example.josip.engine.state;
 
 import com.example.josip.model.PersistentGameObject;
 import com.example.josip.model.QuestState;

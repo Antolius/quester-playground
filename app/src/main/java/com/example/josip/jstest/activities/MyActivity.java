@@ -92,21 +92,13 @@ public class MyActivity extends InjectionActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds itemsList to the action bar if it is present.
         getMenuInflater().inflate(R.menu.my, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
+        return item.getItemId() == R.id.action_settings || super.onOptionsItemSelected(item);
     }
 
     private void initViewComponents() {
@@ -162,20 +154,6 @@ public class MyActivity extends InjectionActivity {
         Quest returnedQuest = databaseProvider.queryQuest(quest.getId());
 
         logger.info(returnedQuest.getName());
-
-        /*
-        ContentValues values = new ContentValues();
-        values.put("example_id", 3);
-        values.put("name", "perica");
-        db.insert("Example", null, values);
-
-        String[] projection = {"example_id", "name"};
-        String[] selectionArgs = {"3"};
-        Cursor cursor = db.query("Example", projection, "example_id=?", selectionArgs, null, null, null);
-
-        cursor.moveToFirst();
-        logger.info(cursor.getString(cursor.getColumnIndex("name")));
-        */
     }
 
     private void experimentWithDatabase() {
