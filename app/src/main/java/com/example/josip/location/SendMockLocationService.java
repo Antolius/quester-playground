@@ -6,10 +6,13 @@ import android.location.Location;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.Settings;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.location.LocationClient;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,21 +26,32 @@ import static com.google.android.gms.common.GooglePlayServicesClient.*;
 public class SendMockLocationService extends Service implements
         ConnectionCallbacks, OnConnectionFailedListener {
 
-    public static List<Location> getMockedLocations(){
+    public List<Location> getMockedLocations(){
         List<Location> mockLocations = new ArrayList<Location>();
 
-        for(int i = 0; i<20; i++){
+        for(int i = 0; i<5; i++){
             Location mockLocation = new Location("flp");
             mockLocation.setAccuracy(3.0f);
-            mockLocation.setLatitude(i);
-            mockLocation.setLongitude(i);
+            mockLocation.setLatitude(50.0+randomDouble());
+            mockLocation.setLongitude(50.0+randomDouble());
+            mockLocation.setAccuracy(LocationRequest.PRIORITY_HIGH_ACCURACY);
+            mockLocations.add(mockLocation);
+        }
+
+
+        for(int i = 0; i<100; i++){
+            Location mockLocation = new Location("flp");
+            mockLocation.setAccuracy(3.0f);
+            mockLocation.setLatitude(1.0+randomDouble());
+            mockLocation.setLongitude(1.0+randomDouble());
+            mockLocation.setAccuracy(LocationRequest.PRIORITY_HIGH_ACCURACY);
             mockLocations.add(mockLocation);
         }
         return mockLocations;
     }
 
 
-    private LocationClient locationClient;
+    private GoogleApiClient locationClient;
     Random random;
 
     @Override
@@ -46,7 +60,44 @@ public class SendMockLocationService extends Service implements
         if (Settings.Secure.getInt(this.getContentResolver(), Settings.Secure.ALLOW_MOCK_LOCATION, 0) == 0)
             Toast.makeText(this, "Setting for mock locations not enabled!", Toast.LENGTH_LONG).show();
 
-        locationClient = new LocationClient(this,this,this);
+        locationClient = new GoogleApiClient.Builder(this)
+                .addApi(LocationServices.API)
+                .addConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
+                    @Override
+                    public void onConnected(Bundle bundle) {
+                        Log.d("QUESTER", "mock client connected");
+
+                        LocationServices.FusedLocationApi.setMockMode(locationClient, true);
+
+                        for (Location mockLocation : getMockedLocations()) {
+
+                            mockLocation.setTime(System.currentTimeMillis());
+
+                            LocationServices.FusedLocationApi.setMockLocation(locationClient, mockLocation);
+                            Log.d("QUESTER", "Setting mock location" + mockLocation);
+
+                            try {
+                                Thread.sleep((long) (1000));
+                            } catch (InterruptedException e) {
+                                return ;
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onConnectionSuspended(int i) {
+                        Log.d("QUESTER", "mock client connection suspended");
+                    }
+                })
+                .addOnConnectionFailedListener(new GoogleApiClient.OnConnectionFailedListener() {
+                    @Override
+                    public void onConnectionFailed(ConnectionResult connectionResult) {
+                        Log.d("QUESTER", "mock client connection failed");
+                    }
+                })
+                .build();
+
+
         locationClient.connect();
 
         random = new Random();
@@ -60,23 +111,7 @@ public class SendMockLocationService extends Service implements
     }
 
     @Override
-    public void onConnected(Bundle bundle) {
-
-        locationClient.setMockMode(true);
-
-        for (Location mockLocation : getMockedLocations()) {
-
-            mockLocation.setTime(System.currentTimeMillis());
-
-            locationClient.setMockLocation(mockLocation);
-
-            try {
-                Thread.sleep((long) (1000));
-            } catch (InterruptedException e) {
-                return ;
-            }
-        }
-    }
+    public void onConnected(Bundle bundle) {}
 
     private double randomDouble(){
         return 0.01 + (0.02 - 0.01) * random.nextDouble();

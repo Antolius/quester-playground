@@ -16,6 +16,8 @@ import com.example.josip.model.QuestGraphUtils;
 import com.example.josip.model.QuestState;
 import com.example.josip.providers.MockedQuestProvider;
 
+import java.util.Set;
+
 /**
  * Created by Josip on 12/10/2014!
  */
@@ -49,9 +51,17 @@ public class GameEngine extends Service {
                 Toast.makeText(context, "Visited checkpoint" + visitedCheckpoint.getName(), Toast.LENGTH_LONG).show();
 
                 gameStateProvider.getCurrentQuestState().getVisitedCheckpoints().add(visitedCheckpoint);
-                locationProcessor.trackLocation(gameStateProvider.getCurrentQuestState().getQuestGraph().getChildren(visitedCheckpoint));
 
-                gameStateProvider.saveState();
+                Set<Checkpoint> nextCheckpoints = gameStateProvider.getCurrentQuestState().getQuestGraph().getChildren(visitedCheckpoint);
+
+                if(nextCheckpoints == null || nextCheckpoints.isEmpty()){
+                    Toast.makeText(context, "No more checkpoints", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+                locationProcessor.trackLocation(nextCheckpoints);
+
+                //gameStateProvider.saveState();
 
                 //TODO: okinuti notifikaciju ili tako nesto :)
             }

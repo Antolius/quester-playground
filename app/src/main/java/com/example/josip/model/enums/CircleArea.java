@@ -28,7 +28,7 @@ public class CircleArea implements CheckpointArea {
 
     @Override
     public boolean isInside(Point point) {
-        return false;
+        return true;
     }
 
     @Override

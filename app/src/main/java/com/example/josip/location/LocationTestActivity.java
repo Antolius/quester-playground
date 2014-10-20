@@ -7,11 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.josip.engine.GameEngine;
-import com.example.josip.gameService.GameEngineService;
 import com.example.josip.jstest.R;
-import com.example.josip.model.Quest;
-import com.example.josip.providers.QuestProvider;
-import com.google.android.gms.location.LocationClient;
 
 public class LocationTestActivity extends Activity {
 
@@ -20,8 +16,8 @@ public class LocationTestActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_location_test);
 
-        Intent sendMockLocationServiceIntent = new Intent(this, SendMockLocationService.class);
-        startService(sendMockLocationServiceIntent);
+        //Intent sendMockLocationServiceIntent = new Intent(this, SendMockLocationService.class);
+        //startService(sendMockLocationServiceIntent);
 
         Intent gameEngineServiceIntent = new Intent(this, GameEngine.class);
         startService(gameEngineServiceIntent);
@@ -36,9 +32,6 @@ public class LocationTestActivity extends Activity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
+        return id == R.id.action_settings || super.onOptionsItemSelected(item);
     }
 }
