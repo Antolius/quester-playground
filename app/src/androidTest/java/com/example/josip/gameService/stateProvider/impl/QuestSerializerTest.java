@@ -10,7 +10,7 @@ import com.example.josip.providers.QuestSerializer;
 
 import org.json.JSONException;
 
-import static com.example.josip.model.enums.CircleArea.*;
+import static com.example.josip.model.area.CircleArea.*;
 
 
 public class QuestSerializerTest extends AndroidTestCase {

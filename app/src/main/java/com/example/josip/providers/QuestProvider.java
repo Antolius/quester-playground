@@ -1,11 +1,11 @@
 package com.example.josip.providers;
 
 import com.example.josip.model.Checkpoint;
-import com.example.josip.model.CheckpointArea;
-import com.example.josip.model.Circle;
+import com.example.josip.model.area.CheckpointArea;
+import com.example.josip.model.area.Circle;
 import com.example.josip.model.Point;
 import com.example.josip.model.Quest;
-import com.example.josip.model.QuestGraph;
+import com.example.josip.model.graph.QuestGraph;
 import com.example.josip.model.QuestMetaData;
 import com.example.josip.model.enums.MeasurementUnit;
 

@@ -1,8 +1,9 @@
 package com.example.josip.model;
 
+import com.example.josip.model.graph.QuestGraph;
+
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by Josip on 10/08/2014.

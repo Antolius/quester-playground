@@ -1,5 +1,7 @@
 package com.example.josip.model;
 
+import com.example.josip.model.area.CheckpointArea;
+
 import java.io.File;
 
 /**

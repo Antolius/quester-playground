@@ -1,8 +1,7 @@
-package com.example.josip.model.enums;
+package com.example.josip.model.area;
 
-import com.example.josip.model.CheckpointArea;
-import com.example.josip.model.Circle;
 import com.example.josip.model.Point;
+import com.example.josip.model.enums.MeasurementUnit;
 
 import org.json.JSONException;
 import org.json.JSONObject;

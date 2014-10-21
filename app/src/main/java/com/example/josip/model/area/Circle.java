@@ -1,4 +1,6 @@
-package com.example.josip.model;
+package com.example.josip.model.area;
+
+import com.example.josip.model.Point;
 
 /**
  * Created by Josip on 11/08/2014!

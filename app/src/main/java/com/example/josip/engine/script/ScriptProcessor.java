@@ -2,23 +2,16 @@ package com.example.josip.engine.script;
 
 import android.util.Log;
 
-import com.example.josip.jstest.JavaScriptApiImpl;
+import com.example.josip.engine.script.api.JavascriptAPI;
 import com.example.josip.engine.state.GameStateProvider;
 import com.example.josip.model.Checkpoint;
 import com.example.josip.model.PersistentGameObject;
 
-import org.mozilla.javascript.Context;
-import org.mozilla.javascript.Scriptable;
-import org.mozilla.javascript.ScriptableObject;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.lang.reflect.InvocationTargetException;
-import java.util.Scanner;
 
 /**
  * Created by Josip on 12/10/2014!
@@ -38,9 +31,12 @@ public class ScriptProcessor {
             return;
         }
 
-        JavaScriptEngine javaScriptEngine = new JavaScriptEngine(new PersistentGameObject());
+        JavaScriptEngine javaScriptEngine = new JavaScriptEngine(
+                new JavascriptAPI()
+        );
+
         try {
-            if(javaScriptEngine.onEnter(readFromFile(reachedCheckpoint.getEventsScript()), "Text added to on Enter")){
+            if (javaScriptEngine.onEnter(readFromFile(reachedCheckpoint.getEventsScript()), "Text added to on Enter")) {
                 checkpointVisitedCallback.checkpointVisited(reachedCheckpoint);
             }
         } catch (Exception e) {

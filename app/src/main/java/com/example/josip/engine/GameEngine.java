@@ -12,7 +12,7 @@ import com.example.josip.engine.script.CheckpointVisitedCallback;
 import com.example.josip.engine.script.ScriptProcessor;
 import com.example.josip.engine.state.GameStateProviderImpl;
 import com.example.josip.model.Checkpoint;
-import com.example.josip.model.QuestGraphUtils;
+import com.example.josip.model.graph.QuestGraphUtils;
 import com.example.josip.model.QuestState;
 import com.example.josip.providers.MockedQuestProvider;
 

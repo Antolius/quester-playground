@@ -1,5 +1,6 @@
-package com.example.josip.model;
+package com.example.josip.model.area;
 
+import com.example.josip.model.Point;
 import com.example.josip.model.enums.MeasurementUnit;
 
 import org.json.JSONException;

@@ -10,11 +10,12 @@ import java.util.Set;
 /**
  * Created by Josip on 11/08/2014!
  */
-public class PersistentGameObject extends ScriptableObject{
+public class PersistentGameObject{
 
-    private HashMap<String, Object> map = new HashMap<String, Object>();
+    public HashMap<String, Object> map;
 
     public PersistentGameObject() {
+        map = new HashMap<String, Object>();
     }
 
     public PersistentGameObject(PersistentGameObject persistentGameObject){
@@ -33,17 +34,4 @@ public class PersistentGameObject extends ScriptableObject{
         return map.keySet();
     }
 
-
-    @Override
-    public String getClassName() {
-        return "PersistentGameObject";
-    }
-
-    public void jsFunction_putProperty(String key, Object value){
-        putProperty(key, value);
-    }
-
-    public Object jsFunction_getProperty(String key){
-        return getProperty(key);
-    }
 }

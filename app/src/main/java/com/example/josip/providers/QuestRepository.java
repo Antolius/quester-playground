@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.example.josip.model.Checkpoint;
 import com.example.josip.model.Quest;
-import com.example.josip.model.QuestGraph;
+import com.example.josip.model.graph.QuestGraph;
 
 import java.util.HashMap;
 import java.util.Map;

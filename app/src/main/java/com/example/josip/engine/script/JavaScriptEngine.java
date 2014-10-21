@@ -1,6 +1,6 @@
 package com.example.josip.engine.script;
 
-import com.example.josip.model.PersistentGameObject;
+import com.example.josip.engine.script.api.JavascriptAPI;
 
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Function;
@@ -9,14 +9,10 @@ import org.mozilla.javascript.ScriptableObject;
 
 public class JavaScriptEngine {
 
-    private PersistentGameObject persistentGameObject;
+    private JavascriptAPI api;
 
-    public JavaScriptEngine() {
-        this.persistentGameObject = new PersistentGameObject();
-    }
-
-    public JavaScriptEngine(PersistentGameObject persistentGameObject) {
-        this.persistentGameObject = persistentGameObject;
+    public JavaScriptEngine(JavascriptAPI api) {
+        this.api = api;
     }
 
     public boolean onEnter(String script, Object argument) throws Exception {
@@ -38,10 +34,10 @@ public class JavaScriptEngine {
 
         try {
             Scriptable scope = context.initStandardObjects();
-            ScriptableObject.defineClass(scope, PersistentGameObject.class);
-            Object[] arg = { persistentGameObject };
-            Scriptable persistence = context.newObject(scope, "PersistentGameObject", arg);
-            scope.put("persistence", scope, persistence);
+            ScriptableObject.defineClass(scope, JavascriptAPI.class);
+            Object[] arg = {api};
+            Scriptable persistence = context.newObject(scope, "API", arg);
+            scope.put("API", scope, persistence);
             context.evaluateString(scope, script, "error:", 1, null);
 
             Object function = scope.get(method, scope);

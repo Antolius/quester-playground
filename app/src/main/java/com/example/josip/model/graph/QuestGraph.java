@@ -1,4 +1,6 @@
-package com.example.josip.model;
+package com.example.josip.model.graph;
+
+import com.example.josip.model.Checkpoint;
 
 import java.util.Collection;
 import java.util.HashMap;

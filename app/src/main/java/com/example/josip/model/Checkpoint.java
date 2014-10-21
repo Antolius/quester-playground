@@ -3,6 +3,8 @@ package com.example.josip.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.example.josip.model.area.CheckpointArea;
+
 import java.io.File;
 
 /**

@@ -1,5 +1,7 @@
 package com.example.josip.model;
 
+import com.example.josip.model.graph.QuestGraph;
+
 /**
  * Created by Josip on 10/08/2014.
  */
