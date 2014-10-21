@@ -1,6 +1,9 @@
 package com.example.josip.engine.script;
 
 import com.example.josip.engine.script.api.JavascriptAPI;
+import com.example.josip.model.Checkpoint;
+import com.example.josip.model.PersistentGameObject;
+import com.example.josip.model.QuestState;
 
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Function;
@@ -35,8 +38,9 @@ public class JavaScriptEngine {
         try {
             Scriptable scope = context.initStandardObjects();
             ScriptableObject.defineClass(scope, JavascriptAPI.class);
-            Object[] arg = {api};
-            Scriptable persistence = context.newObject(scope, "API", arg);
+            //Object[] args = {new PersistentGameObject(), new QuestState(), new Checkpoint()};
+            Object[] args = {new JavascriptAPI()};
+            Scriptable persistence = context.newObject(scope, "API", args);
             scope.put("API", scope, persistence);
             context.evaluateString(scope, script, "error:", 1, null);
 

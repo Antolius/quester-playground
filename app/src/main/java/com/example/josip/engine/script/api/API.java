@@ -10,15 +10,11 @@ import java.util.Set;
 
 public interface API {
 
-    /*
-    List<Checkpoint> getVisitedCheckpints();
+    List<Checkpoint> getVisitedCheckpoints();
 
     public Set<Checkpoint> getNextCheckpoints();
 
     public Checkpoint getCurrentCheckpoint();
-
-    public void addConnection(Checkpoint from, Checkpoint to);
-    */
 
     public PersistentGameObject getPersistenceObject();
 }

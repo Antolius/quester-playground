@@ -1,16 +1,12 @@
 package com.example.josip.model;
 
-import android.webkit.JavascriptInterface;
-
-import org.mozilla.javascript.ScriptableObject;
-
 import java.util.HashMap;
 import java.util.Set;
 
 /**
  * Created by Josip on 11/08/2014!
  */
-public class PersistentGameObject{
+public class PersistentGameObject {
 
     public HashMap<String, Object> map;
 
@@ -18,7 +14,7 @@ public class PersistentGameObject{
         map = new HashMap<String, Object>();
     }
 
-    public PersistentGameObject(PersistentGameObject persistentGameObject){
+    public PersistentGameObject(PersistentGameObject persistentGameObject) {
         this.map = persistentGameObject.map;
     }
 
@@ -30,7 +26,7 @@ public class PersistentGameObject{
         return map.get(key);
     }
 
-    public Set<String> propertyKeys(){
+    public Set<String> propertyKeys() {
         return map.keySet();
     }
 
