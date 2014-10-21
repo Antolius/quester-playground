@@ -10,7 +10,7 @@ import java.util.Set;
  */
 public class QuestGraphUtils {
 
-    public static Set<Checkpoint> getRotCheckpoints(QuestGraph graph) {
+    public static Set<Checkpoint> getRootCheckpoints(QuestGraph graph) {
 
         Set<Checkpoint> result = new HashSet<Checkpoint>();
 

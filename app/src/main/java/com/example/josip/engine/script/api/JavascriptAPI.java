@@ -14,15 +14,24 @@ import java.util.Set;
 
 public class JavascriptAPI extends ScriptableObject implements API {
 
+    public static final String ENTRY_POINT_NAME = "API";
+
     private PersistentGameObject persistentGameObject;
     private QuestState questState;
     private Checkpoint currentCheckpoint;
 
-    public JavascriptAPI() {
-        this.persistentGameObject = new PersistentGameObject();
-        this.questState = new QuestState();
-        this.questState.setVisitedCheckpoints(new ArrayList<Checkpoint>());
-        this.currentCheckpoint = new Checkpoint();
+    public JavascriptAPI() {}
+
+    public void setPersistentGameObject(PersistentGameObject persistentGameObject) {
+        this.persistentGameObject = persistentGameObject;
+    }
+
+    public void setQuestState(QuestState questState) {
+        this.questState = questState;
+    }
+
+    public void setCurrentCheckpoint(Checkpoint currentCheckpoint) {
+        this.currentCheckpoint = currentCheckpoint;
     }
 
     public JavascriptAPI(JavascriptAPI api){
@@ -33,7 +42,7 @@ public class JavascriptAPI extends ScriptableObject implements API {
 
     @Override
     public String getClassName() {
-        return "API";
+        return ENTRY_POINT_NAME;
     }
 
     @JSFunction
@@ -53,7 +62,6 @@ public class JavascriptAPI extends ScriptableObject implements API {
     public Checkpoint getCurrentCheckpoint() {
         return currentCheckpoint;
     }
-
 
     @JSFunction
     @Override

@@ -14,9 +14,7 @@ public class JSEngineTest extends AndroidTestCase {
 
     public void testTest(){
 
-        JavascriptAPI api = new JavascriptAPI();
-
-        JavaScriptEngine engine = new JavaScriptEngine(api);
+        JavaScriptEngine engine = new JavaScriptEngine(getJavascriptAPI());
         boolean s = false;
         try {
             s = engine.onEnter("var onEnter = function(arg){" +
@@ -31,5 +29,15 @@ public class JSEngineTest extends AndroidTestCase {
             e.printStackTrace();
         }
         assertEquals(true, s);
+    }
+
+    private JavascriptAPI getJavascriptAPI() {
+        JavascriptAPI api = new JavascriptAPI();
+        api.setPersistentGameObject(new PersistentGameObject());
+        QuestState questState = new QuestState();
+        questState.setVisitedCheckpoints(new ArrayList<Checkpoint>());
+        api.setQuestState(questState);
+        api.setCurrentCheckpoint(new Checkpoint());
+        return api;
     }
 }

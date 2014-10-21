@@ -5,15 +5,12 @@ import com.example.josip.model.graph.QuestGraph;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * Created by Josip on 10/08/2014.
- */
 public class QuestState {
 
     private QuestGraph questGraph;
     private List<Checkpoint> visitedCheckpoints;
 
-    public  QuestState() {
+    public QuestState() {
     }
 
     public QuestState(QuestGraph questGraph) {

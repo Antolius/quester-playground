@@ -12,15 +12,12 @@ import com.example.josip.engine.script.CheckpointVisitedCallback;
 import com.example.josip.engine.script.ScriptProcessor;
 import com.example.josip.engine.state.GameStateProviderImpl;
 import com.example.josip.model.Checkpoint;
-import com.example.josip.model.graph.QuestGraphUtils;
 import com.example.josip.model.QuestState;
+import com.example.josip.model.graph.QuestGraphUtils;
 import com.example.josip.providers.MockedQuestProvider;
 
 import java.util.Set;
 
-/**
- * Created by Josip on 12/10/2014!
- */
 public class GameEngine extends Service {
 
     private LocationProcessor locationProcessor;
@@ -52,9 +49,12 @@ public class GameEngine extends Service {
 
                 gameStateProvider.getCurrentQuestState().getVisitedCheckpoints().add(visitedCheckpoint);
 
-                Set<Checkpoint> nextCheckpoints = gameStateProvider.getCurrentQuestState().getQuestGraph().getChildren(visitedCheckpoint);
+                Set<Checkpoint> nextCheckpoints = gameStateProvider
+                                .getCurrentQuestState()
+                                .getQuestGraph()
+                                .getChildren(visitedCheckpoint);
 
-                if(nextCheckpoints == null || nextCheckpoints.isEmpty()){
+                if (nextCheckpoints == null || nextCheckpoints.isEmpty()) {
                     Toast.makeText(context, "No more checkpoints", Toast.LENGTH_LONG).show();
                     return;
                 }
@@ -73,7 +73,9 @@ public class GameEngine extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-        locationProcessor.start(QuestGraphUtils.getRotCheckpoints(gameStateProvider.getCurrentQuestState().getQuestGraph()));
+        locationProcessor.start(
+                QuestGraphUtils.getRootCheckpoints(
+                        gameStateProvider.getCurrentQuestState().getQuestGraph()));
         return super.onStartCommand(intent, flags, startId);
     }
 

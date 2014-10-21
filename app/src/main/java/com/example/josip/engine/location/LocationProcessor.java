@@ -22,9 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-/**
- * Created by Josip on 12/10/2014!
- */
 public class LocationProcessor extends BroadcastReceiver{
 
     public static final String CHECKPOINT_EXTRA_ID = "CHECKPOINT";
@@ -49,25 +46,9 @@ public class LocationProcessor extends BroadcastReceiver{
                     @Override
                     public void onConnected(Bundle bundle) {
                         Log.d("QUESTER", "client connected");
-
                         //LocationServices.FusedLocationApi.setMockMode(apiClient, false);
-
                         trackLocation(currentCheckpoints);
-
-
-                        LocationServices.FusedLocationApi.requestLocationUpdates(
-                                apiClient,
-                                LocationRequest.create()
-                                        .setInterval(5000)
-                                        .setFastestInterval(1000)
-                                        .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY),
-                                new LocationListener() {
-                                    @Override
-                                    public void onLocationChanged(Location location) {
-                                        Log.d("QUESTER", "Mock location received" + location.toString());
-                                    }
-                                }
-                        );
+                        startLocationRequests();
                     }
 
                     @Override
@@ -84,6 +65,22 @@ public class LocationProcessor extends BroadcastReceiver{
                 .build();
 
         context.registerReceiver(this, new IntentFilter("Entered checkpoint area"));
+    }
+
+    private void startLocationRequests() {
+        LocationServices.FusedLocationApi.requestLocationUpdates(
+                apiClient,
+                LocationRequest.create()
+                        .setInterval(5000)
+                        .setFastestInterval(1000)
+                        .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY),
+                new LocationListener() {
+                    @Override
+                    public void onLocationChanged(Location location) {
+                        Log.d("QUESTER", "Mock location received" + location.toString());
+                    }
+                }
+        );
     }
 
     public void start(Set<Checkpoint> rootCheckpoints) {
@@ -141,6 +138,8 @@ public class LocationProcessor extends BroadcastReceiver{
             checkpointIds.add(String.valueOf(checkpoint.getId()));
         }
 
+        //remove old geofences
+
         LocationServices.GeofencingApi.addGeofences(
                 apiClient,
                 buildGeofences(checkpoints),
@@ -174,21 +173,3 @@ public class LocationProcessor extends BroadcastReceiver{
     }
 
 }
-
-
-
-/*
-LocationServices.FusedLocationApi.requestLocationUpdates(
-                                apiClient,
-                                LocationRequest.create()
-                                        .setInterval(5000)
-                                        .setFastestInterval(1000)
-                                        .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY),
-                                new LocationListener() {
-                                    @Override
-                                    public void onLocationChanged(Location location) {
-                                        Log.d("QUESTER", "Mock location received" + location.toString());
-                                    }
-                                }
-                        );
- */
