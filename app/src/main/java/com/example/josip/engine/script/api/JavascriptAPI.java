@@ -1,15 +1,12 @@
 package com.example.josip.engine.script.api;
 
 import com.example.josip.model.Checkpoint;
-import com.example.josip.model.PersistentGameObject;
 import com.example.josip.model.QuestState;
 
 import org.mozilla.javascript.NativeObject;
-import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
 import org.mozilla.javascript.annotations.JSFunction;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -70,8 +67,4 @@ public class JavascriptAPI extends ScriptableObject implements API {
         return persistentGameObject;
     }
 
-    @JSFunction
-    public void setPersistenceObject(NativeObject nativeObject) {
-        this.persistentGameObject = nativeObject;
-    }
 }

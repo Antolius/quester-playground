@@ -4,9 +4,6 @@ import android.content.Context;
 import android.webkit.JavascriptInterface;
 import android.widget.Toast;
 
-import com.example.josip.engine.script.api.JavascriptAPI;
-import com.example.josip.model.PersistentGameObject;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.mozilla.javascript.NativeObject;

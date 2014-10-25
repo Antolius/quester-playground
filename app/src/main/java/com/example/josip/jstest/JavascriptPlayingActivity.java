@@ -29,7 +29,7 @@ public class JavascriptPlayingActivity extends Activity {
 
         //Cilj provući javascript objekt kroz obe razine
 
-        //prazan objekt
+        //rhino nativni objekt sa propertyem
         NativeObject persistentGameObject = new NativeObject();
         NativeObject.putProperty(persistentGameObject, "test", "test");
 
@@ -51,9 +51,6 @@ public class JavascriptPlayingActivity extends Activity {
         } catch (Exception e) {
             Log.d("QUESTER", "Invoking failed", e);
         }
-
-        //provjerimo stanje PGO-a
-        ////API.setPersistenceObject({button:"CLICK", search:"Example"});
 
         //pokreće se web view
         String header = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>";
