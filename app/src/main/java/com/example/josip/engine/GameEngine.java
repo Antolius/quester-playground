@@ -10,11 +10,12 @@ import com.example.josip.engine.location.LocationProcessor;
 import com.example.josip.engine.location.LocationReachedCallback;
 import com.example.josip.engine.script.CheckpointVisitedCallback;
 import com.example.josip.engine.script.ScriptProcessor;
+import com.example.josip.engine.state.GameStateProvider;
 import com.example.josip.engine.state.GameStateProviderImpl;
 import com.example.josip.model.Checkpoint;
 import com.example.josip.model.QuestState;
 import com.example.josip.model.graph.QuestGraphUtils;
-import com.example.josip.providers.MockedQuestProvider;
+import com.example.josip.engine.state.archive.MockedQuestProvider;
 
 import java.util.Set;
 
@@ -23,7 +24,7 @@ public class GameEngine extends Service {
     private LocationProcessor locationProcessor;
     private ScriptProcessor scriptProcessor;
 
-    private GameStateProviderImpl gameStateProvider;
+    private GameStateProvider gameStateProvider;
 
     private Context context;
 
@@ -32,7 +33,8 @@ public class GameEngine extends Service {
 
         this.context = this;
         gameStateProvider = new GameStateProviderImpl();
-        gameStateProvider.questState = new QuestState(MockedQuestProvider.getMockedQuest(this).getQuestGraph());
+        gameStateProvider.setCurrentQuestState(
+                new QuestState(MockedQuestProvider.getMockedQuest(this).getQuestGraph()));
 
         locationProcessor = new LocationProcessor(this, new LocationReachedCallback() {
             @Override
@@ -61,7 +63,7 @@ public class GameEngine extends Service {
 
                 locationProcessor.trackLocation(nextCheckpoints);
 
-                //gameStateProvider.saveState();
+                gameStateProvider.saveState();
 
                 //TODO: okinuti notifikaciju ili tako nesto :)
             }

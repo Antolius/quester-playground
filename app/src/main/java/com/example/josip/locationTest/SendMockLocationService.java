@@ -1,4 +1,4 @@
-package com.example.josip.location;
+package com.example.josip.locationTest;
 
 import android.app.Service;
 import android.content.Intent;

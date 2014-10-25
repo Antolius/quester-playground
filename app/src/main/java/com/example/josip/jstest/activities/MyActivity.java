@@ -17,7 +17,7 @@ import com.example.josip.model.CheckpointBuilder;
 import com.example.josip.model.Quest;
 import com.example.josip.model.QuestBuilder;
 import com.example.josip.model.area.CircleArea;
-import com.example.josip.providers.QuestRepository;
+import com.example.josip.engine.state.archive.QuestRepository;
 import com.mysema.query.sql.SQLQuery;
 import com.mysema.query.sql.SQLQueryImpl;
 import com.mysema.query.sql.SQLTemplates;

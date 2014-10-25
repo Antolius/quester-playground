@@ -35,7 +35,7 @@
             android:label="@string/app_name" >
         </activity>
         <activity
-            android:name="com.example.josip.location.LocationTestActivity"
+            android:name="com.example.josip.locationTest.LocationTestActivity"
             android:label="@string/app_name" >
         </activity>
         <activity
@@ -56,7 +56,7 @@
             android:label="Test service" >
         </service>
         <service
-            android:name="com.example.josip.location.SendMockLocationService"
+            android:name="com.example.josip.locationTest.SendMockLocationService"
             android:icon="@drawable/ic_launcher"
             android:label="Location test service"
             android:process=":mockLocationService" >

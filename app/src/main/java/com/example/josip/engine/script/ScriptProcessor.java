@@ -5,7 +5,6 @@ import android.util.Log;
 import com.example.josip.engine.script.api.JavascriptAPI;
 import com.example.josip.engine.state.GameStateProvider;
 import com.example.josip.model.Checkpoint;
-import com.example.josip.model.PersistentGameObject;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -31,9 +30,12 @@ public class ScriptProcessor {
             return;
         }
 
-        JavaScriptEngine javaScriptEngine = new JavaScriptEngine(
-                new JavascriptAPI()
-        );
+        JavascriptAPI api = new JavascriptAPI();
+        api.setPersistentGameObject(gameStateProvider.getPersistentGameObject());
+        api.setQuestState(gameStateProvider.getCurrentQuestState());
+        api.setCurrentCheckpoint(reachedCheckpoint);
+
+        JavaScriptEngine javaScriptEngine = new JavaScriptEngine(api);
 
         try {
             if (javaScriptEngine.onEnter(readFromFile(reachedCheckpoint.getEventsScript()), "Text added to on Enter")) {

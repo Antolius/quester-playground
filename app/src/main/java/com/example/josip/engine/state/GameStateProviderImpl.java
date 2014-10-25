@@ -1,16 +1,13 @@
 package com.example.josip.engine.state;
 
-import com.example.josip.model.PersistentGameObject;
 import com.example.josip.model.QuestState;
 
-/**
- * Created by tdubravcevic on 10.8.2014!
- */
+import org.mozilla.javascript.NativeObject;
+
 public class GameStateProviderImpl implements GameStateProvider {
 
     public QuestState questState;
-
-    public PersistentGameObject persistentGameObject;
+    public NativeObject persistentGameObject;
 
     @Override
     public QuestState getCurrentQuestState() {
@@ -18,7 +15,12 @@ public class GameStateProviderImpl implements GameStateProvider {
     }
 
     @Override
-    public PersistentGameObject getPersistantGameObject() {
+    public void setCurrentQuestState(QuestState questState) {
+        this.questState = questState;
+    }
+
+    @Override
+    public NativeObject getPersistentGameObject() {
         return persistentGameObject;
     }
 

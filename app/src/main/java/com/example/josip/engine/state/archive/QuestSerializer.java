@@ -1,4 +1,4 @@
-package com.example.josip.providers;
+package com.example.josip.engine.state.archive;
 
 import com.example.josip.model.Checkpoint;
 import com.example.josip.model.area.CheckpointArea;

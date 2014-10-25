@@ -15,7 +15,7 @@ import android.widget.TextView;
 import com.example.josip.jstest.R;
 import com.example.josip.model.Point;
 import com.example.josip.model.Quest;
-import com.example.josip.providers.QuestProvider;
+import com.example.josip.engine.state.archive.QuestProvider;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
