@@ -10,6 +10,7 @@ import android.webkit.WebView;
 
 import com.example.josip.engine.script.JavaScriptEngine;
 import com.example.josip.engine.script.api.JavascriptAPI;
+import com.example.josip.engine.script.api.WebViewAPI;
 import com.example.josip.model.PersistentGameObject;
 
 import org.mozilla.javascript.NativeObject;

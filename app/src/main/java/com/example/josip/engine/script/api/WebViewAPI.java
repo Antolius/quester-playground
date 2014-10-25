@@ -1,4 +1,4 @@
-package com.example.josip.jstest;
+package com.example.josip.engine.script.api;
 
 import android.content.Context;
 import android.webkit.JavascriptInterface;
