@@ -1,0 +1,38 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>jQuery UI Draggable - Default functionality</title>
+    <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+
+    <!-- include api here that wraps calls in json-->
+    <script>
+
+    var names;
+
+    function start(){
+
+        names = JSON.parse(API.getPersistence());
+
+        API.showToast(names.button);
+        names.hola = "hola";
+
+        $("#button").val(names.button);
+        $("#searchTxt").val(names.search);
+    }
+
+    function searchURL() {
+
+		 var input = document.getElementById("searchTxt");
+
+		 names.input = input.value;
+
+		 API.setPersistence(JSON.stringify(names));
+		 API.showToast(input.value);
+    }
+	</script>
+</head>
+<body onload="start();">
+    <input name="searchTxt" type="text" maxlength="512" id="searchTxt" class="searchField"/>
+    <input type="button" value="add" onclick="searchURL()" id="button">
+</body>
+</html>

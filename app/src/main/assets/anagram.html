@@ -1,0 +1,34 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>jQuery UI Draggable - Default functionality</title>
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
+    <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="http://code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+    <script src="https://raw.githubusercontent.com/furf/jquery-ui-touch-punch/master/jquery.ui.touch-punch.min.js"></script>
+    <style>
+        .drag { width: 0px; height: 00px; padding: 0.5em; }
+    </style>
+    <script>
+
+	
+	$(function() {
+		$(".drag").draggable();
+	});
+
+
+    </script>
+</head>
+<body onload="start()">
+
+<span class="ui-widget-content drag">R</span>
+<span class="ui-widget-content drag">T</span>
+<span class="ui-widget-content drag">O</span>
+<span class="ui-widget-content drag">A</span>
+<span class="ui-widget-content drag">Š</span>
+<span class="ui-widget-content drag">K</span>
+<span class="ui-widget-content drag">L</span>
+<span class="ui-widget-content drag">Č</span>
+
+</body>
+</html>

@@ -14,5 +14,5 @@ public interface API {
 
     public Checkpoint getCurrentCheckpoint();
 
-    public PersistentGameObject getPersistenceObject();
+    public Object getPersistenceObject();
 }

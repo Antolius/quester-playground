@@ -6,5 +6,7 @@
     <string name="action_settings">Settings</string>
     <string name="persistant_service_subtitle">Test the persistant Service</string>
     <string name="location_manager_subtitle">Test of injected Location Manager</string>
+    <string name="title_activity_javascript_playing">JavascriptPlayingActivity</string>
+    <string name="hello_world">Hello world!</string>
 
 </resources>
