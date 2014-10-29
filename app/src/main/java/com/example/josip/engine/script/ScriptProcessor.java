@@ -18,11 +18,11 @@ import java.io.InputStreamReader;
 public class ScriptProcessor {
 
     private GameStateProvider gameStateProvider;
-    private CheckpointVisitedCallback checkpointVisitedCallback;
+    private ScriptProcessedCallback scriptProcessedCallback;
 
-    public ScriptProcessor(GameStateProvider gameStateProvider, CheckpointVisitedCallback checkpointVisitedCallback) {
+    public ScriptProcessor(GameStateProvider gameStateProvider, ScriptProcessedCallback scriptProcessedCallback) {
         this.gameStateProvider = gameStateProvider;
-        this.checkpointVisitedCallback = checkpointVisitedCallback;
+        this.scriptProcessedCallback = scriptProcessedCallback;
     }
 
     public void processCheckpoint(Checkpoint reachedCheckpoint) {
@@ -39,7 +39,7 @@ public class ScriptProcessor {
 
         try {
             if (javaScriptEngine.onEnter(readFromFile(reachedCheckpoint.getEventsScript()), "Text added to on Enter")) {
-                checkpointVisitedCallback.checkpointVisited(reachedCheckpoint);
+                scriptProcessedCallback.scriptProcessed(reachedCheckpoint);
             }
         } catch (Exception e) {
             Log.e("QUESTER", "Invoking failed", e);
@@ -48,7 +48,7 @@ public class ScriptProcessor {
         /*
         try {
             if(evaluateScript(loadScript(reachedCheckpoint.getEventsScript()), "onEnterScript")) {
-                checkpointVisitedCallback.checkpointVisited(reachedCheckpoint);
+                checkpointVisitedCallback.scriptProcessed(reachedCheckpoint);
             }
         } catch (FileNotFoundException e) {
             if (Log.isLoggable("QUESTER", Log.ERROR)) {

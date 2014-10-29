@@ -5,8 +5,8 @@ import com.example.josip.model.Checkpoint;
 /**
  * Created by Josip on 12/10/2014!
  */
-public interface CheckpointVisitedCallback {
+public interface ScriptProcessedCallback {
 
-    public void checkpointVisited(Checkpoint visitedCheckpoint);
+    public void scriptProcessed(Checkpoint visitedCheckpoint);
 
 }
