@@ -1,5 +1,6 @@
 package com.example.josip.jstest.activities;
 
+import android.app.Activity;
 import android.database.sqlite.SQLiteDatabase;
 import android.location.Criteria;
 import android.location.Location;
@@ -25,7 +26,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 
-public class MyActivity extends InjectionActivity {
+public class MyActivity extends Activity{
 
     private static final Logger logger = LoggerFactory.getLogger(MyActivity.class);
     @Inject
