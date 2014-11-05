@@ -10,7 +10,7 @@ import org.mozilla.javascript.annotations.JSFunction;
 import java.util.List;
 import java.util.Set;
 
-public class JavascriptAPI extends ScriptableObject implements API {
+public class JavascriptAPI extends ScriptableObject {
 
     public static final String ENTRY_POINT_NAME = "API";
 
@@ -44,25 +44,21 @@ public class JavascriptAPI extends ScriptableObject implements API {
     }
 
     @JSFunction
-    @Override
     public List<Checkpoint> getVisitedCheckpoints() {
         return questState.getVisitedCheckpoints();
     }
 
     @JSFunction
-    @Override
     public Set<Checkpoint> getNextCheckpoints() {
         return questState.getQuestGraph().getChildren(currentCheckpoint);
     }
 
     @JSFunction
-    @Override
     public Checkpoint getCurrentCheckpoint() {
         return currentCheckpoint;
     }
 
     @JSFunction
-    @Override
     public NativeObject getPersistenceObject() {
         return persistentGameObject;
     }

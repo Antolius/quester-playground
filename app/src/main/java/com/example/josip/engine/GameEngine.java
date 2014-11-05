@@ -23,7 +23,7 @@ import java.util.Set;
 
 public class GameEngine extends Service {
 
-    private LocationProcessor locationProcessor;
+    protected LocationProcessor locationProcessor;
     private ScriptProcessor scriptProcessor;
     private MultiplayerProcessor multiplayerProcessor;
 
@@ -42,14 +42,16 @@ public class GameEngine extends Service {
         locationProcessor = new LocationProcessor(this, new LocationReachedCallback() {
             @Override
             public void locationReached(Checkpoint reachedCheckpoint) {
-                scriptProcessor.processCheckpoint(reachedCheckpoint);
+
+                scriptProcessor.process(reachedCheckpoint);
             }
         });
 
         scriptProcessor = new ScriptProcessor(gameStateProvider, new ScriptProcessedCallback() {
             @Override
             public void scriptProcessed(Checkpoint visitedCheckpoint) {
-                multiplayerProcessor.synchronize(visitedCheckpoint);
+                GameEngine.this.checkpointVisited(visitedCheckpoint);
+                //multiplayerProcessor.process(visitedCheckpoint);
             }
         });
 
@@ -63,6 +65,7 @@ public class GameEngine extends Service {
         );
 
         super.onCreate();
+
     }
 
     private void checkpointVisited(Checkpoint visitedCheckpoint) {

@@ -143,14 +143,4 @@ public class MyActivity extends Activity{
 
         logger.info(returnedQuest.getName());
     }
-
-
-
-    private void useLocationManager() {
-
-        Location location = locationManager.getLastKnownLocation(locationManager.getBestProvider(new Criteria(), false));
-        latitudeText.setText(Double.toString(location.getLatitude()));
-        longitudeText.setText(Double.toString(location.getLongitude()));
-
-    }
 }

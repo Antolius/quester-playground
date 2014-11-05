@@ -30,11 +30,20 @@ public class WebViewAPI {
     @JavascriptInterface
     public String getPersistence(){
 
-        NativeObject nativeObject = api.getPersistenceObject();
+        return stringify(api.getPersistenceObject());
+    }
+
+    private String stringify(NativeObject nativeObject){
 
         String json = "{";
         for(Object object : nativeObject.keySet()){
-            json +="\""+object+"\":\""+nativeObject.get(object)+"\",";
+
+            Object value = nativeObject.get(object);
+            if(value instanceof NativeObject){
+                value = stringify((NativeObject) value);
+            }
+
+            json +="\""+object+"\":\""+value+"\",";
         }
         json = json.substring(0,json.length()-1)+"}";
 

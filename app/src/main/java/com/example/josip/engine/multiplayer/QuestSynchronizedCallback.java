@@ -4,5 +4,5 @@ import com.example.josip.model.Checkpoint;
 
 public interface QuestSynchronizedCallback {
 
-    public void questSynchronized(Checkpoint vistedCheckpoint);
+    public void questSynchronized(Checkpoint visitedCheckpoint);
 }

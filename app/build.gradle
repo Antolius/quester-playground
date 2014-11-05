@@ -14,6 +14,12 @@ android {
         versionName "1.0"
         testInstrumentationRunner "com.google.android.apps.common.testing.testrunner.GoogleInstrumentationTestRunner"
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_6
+        targetCompatibility JavaVersion.VERSION_1_6
+    }
+
     buildTypes {
         release {
             runProguard false
@@ -45,21 +51,16 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
 
     androidTestCompile 'org.robolectric:robolectric:2.3'
-    //testCompile 'com.squareup:fest-android:1.0.+'
-
-    //dagger, DI framework:
-    //provided 'com.squareup.dagger:dagger-compiler:1.2.2'
 
     androidTestCompile ("org.mockito:mockito-core:1.9.5"){
         exclude module: 'asm'
     }
-    androidTestCompile ("com.google.dexmaker:dexmaker:1.0"){
+    androidTestCompile ("com.google.dexmaker:dexmaker:1.1"){
         exclude module: 'asm'
     }
-    androidTestCompile ("com.google.dexmaker:dexmaker-mockito:1.0"){
+    androidTestCompile ("com.google.dexmaker:dexmaker-mockito:1.1"){
         exclude module: 'asm'
     }
-
     androidTestCompile('junit:junit:4.11') {
         exclude module: 'hamcrest-core'
     }
@@ -94,5 +95,17 @@ apply plugin: 'idea'
 idea {
     module {
         testOutputDir = file('build/test-classes/debug')
+    }
+}
+
+tasks.whenTaskAdded { theTask ->
+    def taskName = theTask.name.toString()
+    if ("testDebug".toString().equals(taskName)) {
+        /**
+         * Listen for when robolectric adds the 'testDebug' task and when it does, add the -noverify
+         * option to that task's jvmArgs.  This allows us to turn off byte code verification when
+         * running our unit tests.
+         */
+        theTask.jvmArgs('-noverify')
     }
 }

@@ -17,9 +17,9 @@ public class JavaScriptEngine {
         this.api = api;
     }
 
-    public boolean onEnter(String script, Object argument) throws Exception {
+    public boolean onEnter(String script, Object... arguments) throws Exception {
 
-        return runMethodFromScript("onEnter", script, new Object[]{argument});
+        return runMethodFromScript("onEnter", script, new Object[]{arguments});
     }
 
     public void onExit(String script) throws Exception {
