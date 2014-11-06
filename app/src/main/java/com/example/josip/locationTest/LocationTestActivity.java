@@ -16,8 +16,8 @@ public class LocationTestActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_location_test);
 
-        //Intent sendMockLocationServiceIntent = new Intent(this, SendMockLocationService.class);
-        //startService(sendMockLocationServiceIntent);
+        Intent sendMockLocationServiceIntent = new Intent(this, SendMockLocationService.class);
+        startService(sendMockLocationServiceIntent);
 
         Intent gameEngineServiceIntent = new Intent(this, GameEngine.class);
         startService(gameEngineServiceIntent);

@@ -7,36 +7,24 @@ import android.location.Location;
 import com.example.josip.engine.location.geofencing.GeofencingClient;
 import com.example.josip.model.Checkpoint;
 import com.example.josip.model.Point;
-import com.example.josip.model.area.CheckpointArea;
 import com.example.josip.model.area.Circle;
 import com.example.josip.model.area.CircleArea;
-import com.example.josip.model.enums.MeasurementUnit;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.Geofence;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
-import org.robolectric.shadows.ShadowContext;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyList;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -182,7 +170,7 @@ public class LocationProcessorTest {
     private void whenGeofenceTriggered(){
 
         Intent intent = new Intent();
-        intent.putExtra(LocationProcessor.CHECKPOINT_EXTRA_ID, triggeringCheckpointId.toString());
+        intent.putExtra(LocationProcessor.TRIGGERING_CHECKPOINT_ID, triggeringCheckpointId.toString());
         intent.putExtra(LocationProcessor.TRIGGERING_LOCATION, triggeringLocation);
 
         locationProcessor.onReceive(Robolectric.application, intent);

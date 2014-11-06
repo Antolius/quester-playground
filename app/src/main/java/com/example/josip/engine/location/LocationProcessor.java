@@ -5,9 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.location.Location;
-import android.util.Log;
 
 import com.example.josip.Logger;
+import com.example.josip.engine.location.geofencing.GeofenceUtil;
 import com.example.josip.engine.location.geofencing.GeofencingClient;
 import com.example.josip.engine.location.geofencing.GoogleGeofencingClient;
 import com.example.josip.model.Checkpoint;
@@ -22,8 +22,8 @@ public class LocationProcessor extends BroadcastReceiver {
 
     public static final Logger logger = Logger.getLogger(LocationProcessor.class);
 
-    public static final String CHECKPOINT_EXTRA_ID = "CHECKPOINT";
-    public static final String CHECKPOINTS_ARRAY_LIST_EXTRA_ID = "CHECKPOINTS";
+    public static final String TRIGGERING_CHECKPOINT_ID = "CHECKPOINT";
+    public static final String REGISTERED_CHECKPOINTS_IDS = "CHECKPOINTS";
     public static final String TRIGGERING_LOCATION = "LOCATION";
 
     private Context context;
@@ -73,10 +73,8 @@ public class LocationProcessor extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
 
-        Checkpoint triggeringCheckpoint
-                = getTriggeringCheckpoint(intent.getStringExtra(CHECKPOINT_EXTRA_ID));
-        Location triggeringLocation
-                = intent.getParcelableExtra(LocationProcessor.TRIGGERING_LOCATION);
+        Checkpoint triggeringCheckpoint = getTriggeringCheckpoint(intent.getStringExtra(TRIGGERING_CHECKPOINT_ID));
+        Location triggeringLocation = intent.getParcelableExtra(LocationProcessor.TRIGGERING_LOCATION);
 
         if (triggeringCheckpoint.getArea().isInside(Point.fromLocation(triggeringLocation))) {
 
@@ -101,25 +99,16 @@ public class LocationProcessor extends BroadcastReceiver {
         this.currentCheckpoints = checkpoints;
 
         geofencingClient.registerGeofences(buildGeofences(checkpoints));
-        //remove old geofences
+        //TODO remove old geofences
 
     }
 
     private List<Geofence> buildGeofences(Set<Checkpoint> checkpoints) {
+
         List<Geofence> geofences = new ArrayList<Geofence>();
 
         for (Checkpoint checkpoint : checkpoints) {
-            Geofence geofence = new Geofence.Builder()
-                    .setRequestId(String.valueOf(checkpoint.getId()))
-                    .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER)
-                    .setLoiteringDelay(1000)
-                    .setCircularRegion(
-                            checkpoint.getArea().aproximatingCircle().getCenter().getLatitude(),
-                            checkpoint.getArea().aproximatingCircle().getCenter().getLatitude(),
-                            (float) checkpoint.getArea().aproximatingCircle().getRadius())
-                    .setExpirationDuration(Geofence.NEVER_EXPIRE)
-                    .build();
-            geofences.add(geofence);
+            geofences.add(GeofenceUtil.fromCheckpoint(checkpoint));
         }
         return geofences;
     }

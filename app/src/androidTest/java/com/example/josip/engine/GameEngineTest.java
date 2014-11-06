@@ -1,6 +1,5 @@
 package com.example.josip.engine;
 
-import android.content.ComponentName;
 import android.content.Intent;
 import android.location.Location;
 
@@ -26,7 +25,7 @@ public class GameEngineTest {
         engine.onStartCommand(new Intent(), 0, 0);
 
         Intent intent = new Intent();
-        intent.putExtra(LocationProcessor.CHECKPOINT_EXTRA_ID, "1");
+        intent.putExtra(LocationProcessor.TRIGGERING_CHECKPOINT_ID, "1");
         Location location = new Location("test");
         location.setLatitude(1.0);
         location.setLongitude(1.0);

@@ -76,7 +76,7 @@ public abstract class GoogleGeofencingClient implements GeofencingClient {
                         0,
                         new Intent(context, GeofenceIntentService.class)
                                 .putStringArrayListExtra(
-                                        LocationProcessor.CHECKPOINTS_ARRAY_LIST_EXTRA_ID,
+                                        LocationProcessor.REGISTERED_CHECKPOINTS_IDS,
                                         checkpointIds),
                         PendingIntent.FLAG_UPDATE_CURRENT
                 )

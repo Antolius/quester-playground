@@ -2,11 +2,12 @@ package com.example.josip.engine.location;
 
 import android.content.Intent;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
+
+import java.util.ArrayList;
 
 import static org.mockito.Mockito.mock;
 
@@ -16,11 +17,14 @@ public class GeofenceIntentServiceTest {
 
     private GeofenceIntentService geofenceIntentService;
 
-    @Ignore
     @Test
     public void test(){
 
-        Intent intent = mock(Intent.class);
+        ArrayList<String> ids = new ArrayList<String>();
+        ids.add("1");
+
+        Intent intent = new Intent();
+        intent.putStringArrayListExtra(LocationProcessor.REGISTERED_CHECKPOINTS_IDS, ids);
 
         geofenceIntentService = new GeofenceIntentService();
 
