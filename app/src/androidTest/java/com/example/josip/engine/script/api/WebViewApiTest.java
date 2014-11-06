@@ -77,7 +77,7 @@ public class WebViewApiTest {
         whenSetPersistence();
 
 
-        Map<String, Object> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<String, Object>();
         map.put("booleanVariable", true);
         map.put("stringVariable", "bla");
         map.put("intVariable", 1);

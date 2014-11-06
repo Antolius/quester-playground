@@ -1,14 +1,15 @@
 package com.example.josip.engine.multiplayer;
 
-import com.example.josip.engine.state.GameStateProviderImpl;
 import com.example.josip.model.Checkpoint;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -21,17 +22,58 @@ public class MultiPlayerProcessorTest {
     private MultiplayerNetworkAPI networkAPI = mock(MultiplayerNetworkAPI.class);
     private QuestSynchronizedCallback callback = mock(QuestSynchronizedCallback.class);
 
+    private Checkpoint checkpoint;
+
+    @Before
+    public void setUp() {
+
+        processor = new MultiplayerProcessor(networkAPI, callback);
+    }
+
     @Test
-    public void test(){
+    public void processingSuccessful() {
 
-        processor = new MultiplayerProcessor(new GameStateProviderImpl(), callback, networkAPI);
+        givenCheckpoint();
+        givenAPIReturns(true);
 
-        Checkpoint checkpoint = new Checkpoint();
+        whenProcessCheckpoint();
 
-        when(networkAPI.processCheckpoint(checkpoint)).thenReturn(true);
+        thenCallbackIsInvoked();
+    }
+
+    @Test
+    public void processingUnSuccessful() {
+
+        givenCheckpoint();
+        givenAPIReturns(false);
+
+        whenProcessCheckpoint();
+
+        thenCallbackIsNotInvoked();
+    }
+
+    private void givenCheckpoint() {
+
+        this.checkpoint = new Checkpoint();
+    }
+
+    private void givenAPIReturns(Boolean result) {
+
+        when(networkAPI.processCheckpoint(checkpoint)).thenReturn(result);
+    }
+
+    private void whenProcessCheckpoint() {
 
         processor.process(checkpoint);
+    }
+
+    private void thenCallbackIsInvoked() {
 
         verify(callback).questSynchronized(checkpoint);
+    }
+
+    private void thenCallbackIsNotInvoked() {
+
+        verify(callback, never()).questSynchronized(checkpoint);
     }
 }

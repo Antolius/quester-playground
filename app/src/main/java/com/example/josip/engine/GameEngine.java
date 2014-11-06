@@ -10,6 +10,7 @@ import com.example.josip.engine.location.LocationProcessor;
 import com.example.josip.engine.location.LocationReachedCallback;
 import com.example.josip.engine.multiplayer.MultiplayerProcessor;
 import com.example.josip.engine.multiplayer.QuestSynchronizedCallback;
+import com.example.josip.engine.script.FileManager;
 import com.example.josip.engine.script.ScriptProcessedCallback;
 import com.example.josip.engine.script.ScriptProcessor;
 import com.example.josip.engine.state.GameStateProvider;
@@ -47,7 +48,7 @@ public class GameEngine extends Service {
             }
         });
 
-        scriptProcessor = new ScriptProcessor(gameStateProvider, new ScriptProcessedCallback() {
+        scriptProcessor = new ScriptProcessor(new FileManager(), gameStateProvider, new ScriptProcessedCallback() {
             @Override
             public void scriptProcessed(Checkpoint visitedCheckpoint) {
                 GameEngine.this.checkpointVisited(visitedCheckpoint);
@@ -55,7 +56,7 @@ public class GameEngine extends Service {
             }
         });
 
-        multiplayerProcessor = new MultiplayerProcessor("http://www.test.com", gameStateProvider,
+        multiplayerProcessor = new MultiplayerProcessor("http://www.test.com",
                 new QuestSynchronizedCallback() {
                     @Override
                     public void questSynchronized(Checkpoint visitedCheckpoint) {

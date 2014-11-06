@@ -2,7 +2,12 @@ package com.example.josip.engine.script;
 
 import java.io.File;
 
-public interface FileManager {
+public class FileManager {
 
-    public String readFromFile(File file);
+    //TODO move this class somewhere else
+
+    public String readFromFile(File file){
+
+       return "";
+    }
 }
