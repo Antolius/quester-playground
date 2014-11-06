@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 import android.location.Location;
 import android.util.Log;
 
+import com.example.josip.Logger;
 import com.example.josip.engine.location.geofencing.GeofencingClient;
 import com.example.josip.engine.location.geofencing.GoogleGeofencingClient;
 import com.example.josip.model.Checkpoint;
@@ -18,6 +19,8 @@ import java.util.List;
 import java.util.Set;
 
 public class LocationProcessor extends BroadcastReceiver {
+
+    public static final Logger logger = Logger.getLogger(LocationProcessor.class);
 
     public static final String CHECKPOINT_EXTRA_ID = "CHECKPOINT";
     public static final String CHECKPOINTS_ARRAY_LIST_EXTRA_ID = "CHECKPOINTS";
@@ -51,22 +54,18 @@ public class LocationProcessor extends BroadcastReceiver {
 
     public void start(Set<Checkpoint> rootCheckpoints) {
 
-        if (Log.isLoggable("QUESTER", Log.DEBUG)) {
-            Log.d("QUESTER", "Location service started");
-        }
+        logger.debug("Location service started");
 
         this.currentCheckpoints = rootCheckpoints;
 
-        context.registerReceiver(this, new IntentFilter("Entered checkpoint area"));
+        context.registerReceiver(this, new IntentFilter(GeofenceIntentService.GEOFENCE_INTENT_NAME));
 
         geofencingClient.start();
     }
 
     public void stop() {
 
-        if (Log.isLoggable("QUESTER", Log.DEBUG)) {
-            Log.d("QUESTER", "Location service stopped");
-        }
+        logger.debug("Location service stopped");
 
         geofencingClient.stop();
     }
@@ -97,9 +96,7 @@ public class LocationProcessor extends BroadcastReceiver {
 
     public void trackLocation(Set<Checkpoint> checkpoints) {
 
-        if (Log.isLoggable("QUESTER", Log.DEBUG)) {
-            Log.d("QUESTER", "Registering checkpoint areas");
-        }
+        logger.debug("Registering checkpoint areas");
 
         this.currentCheckpoints = checkpoints;
 

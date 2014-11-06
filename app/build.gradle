@@ -55,12 +55,12 @@ dependencies {
     androidTestCompile ("org.mockito:mockito-core:1.9.5"){
         exclude module: 'asm'
     }
-    androidTestCompile ("com.google.dexmaker:dexmaker:1.1"){
-        exclude module: 'asm'
-    }
-    androidTestCompile ("com.google.dexmaker:dexmaker-mockito:1.1"){
-        exclude module: 'asm'
-    }
+    //androidTestCompile ("com.google.dexmaker:dexmaker:1.1"){
+    //    exclude module: 'asm'
+    //}
+    //androidTestCompile ("com.google.dexmaker:dexmaker-mockito:1.1"){
+    //    exclude module: 'asm'
+    //}
     androidTestCompile('junit:junit:4.11') {
         exclude module: 'hamcrest-core'
     }

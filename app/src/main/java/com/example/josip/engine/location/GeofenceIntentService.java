@@ -13,6 +13,8 @@ import java.util.List;
 
 public class GeofenceIntentService extends IntentService {
 
+    public static final String GEOFENCE_INTENT_NAME = "Entered chackpoint area";
+
     public GeofenceIntentService() {
         super("GeofenceIntentService");
     }
@@ -34,7 +36,7 @@ public class GeofenceIntentService extends IntentService {
 
         String checkpointId = getTriggeringCheckpoint(checkpointIds, fences);
 
-        sendBroadcast(new Intent("Entered checkpoint area")
+        sendBroadcast(new Intent(GEOFENCE_INTENT_NAME)
                 .putExtra(LocationProcessor.CHECKPOINT_EXTRA_ID, checkpointId)
                 .putExtra(LocationProcessor.TRIGGERING_LOCATION, location)
         );
