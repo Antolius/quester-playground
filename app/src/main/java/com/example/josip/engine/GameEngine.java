@@ -14,7 +14,6 @@ import com.example.josip.engine.script.FileManager;
 import com.example.josip.engine.script.ScriptProcessedCallback;
 import com.example.josip.engine.script.ScriptProcessor;
 import com.example.josip.engine.state.GameStateProvider;
-import com.example.josip.engine.state.GameStateProviderImpl;
 import com.example.josip.engine.state.archive.MockedQuestProvider;
 import com.example.josip.model.Checkpoint;
 import com.example.josip.model.QuestState;
@@ -36,7 +35,7 @@ public class GameEngine extends Service {
     public void onCreate() {
 
         this.context = this;
-        gameStateProvider = new GameStateProviderImpl();
+        gameStateProvider = new GameStateProvider();
         gameStateProvider.setCurrentQuestState(
                 new QuestState(MockedQuestProvider.getMockedQuest(this).getQuestGraph()));
 
@@ -87,7 +86,7 @@ public class GameEngine extends Service {
 
         locationProcessor.trackLocation(nextCheckpoints);
 
-        gameStateProvider.saveState();
+        gameStateProvider.saveState(context);
 
         //TODO: okinuti notifikaciju ili tako nesto :)
     }

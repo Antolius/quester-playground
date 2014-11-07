@@ -1,6 +1,6 @@
 package com.example.josip.engine.script;
 
-import com.example.josip.engine.state.GameStateProviderImpl;
+import com.example.josip.engine.state.GameStateProvider;
 import com.example.josip.model.Checkpoint;
 
 import org.junit.Before;
@@ -10,6 +10,7 @@ import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
 import java.io.File;
+import java.io.IOException;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
@@ -31,7 +32,7 @@ public class ScriptProcessorTest {
     @Before
     public void setUp() {
 
-        processor = new ScriptProcessor(fileManager, new GameStateProviderImpl(), callback);
+        processor = new ScriptProcessor(fileManager, new GameStateProvider(), callback);
     }
 
     @Test
@@ -45,7 +46,7 @@ public class ScriptProcessorTest {
     }
 
     @Test
-    public void whenScriptIsSuccessfullyProcessedCallbackIsInvoked() {
+    public void whenScriptIsSuccessfullyProcessedCallbackIsInvoked() throws IOException {
 
         givenCheckpointWithScript("var onEnter = function(){return true;}");
 
@@ -55,7 +56,7 @@ public class ScriptProcessorTest {
     }
 
     @Test
-    public void whenScriptIsUnSuccessfullyProcessedCallbackIsNotInvoked() {
+    public void whenScriptIsUnSuccessfullyProcessedCallbackIsNotInvoked() throws IOException {
 
         givenCheckpointWithScript("var onEnter = function(){return false;}");
 
@@ -72,7 +73,7 @@ public class ScriptProcessorTest {
         this.checkpoint = checkpoint;
     }
 
-    private void givenCheckpointWithScript(String script) {
+    private void givenCheckpointWithScript(String script) throws IOException {
 
         Checkpoint checkpoint = new Checkpoint();
         checkpoint.setEventsScript(new File(""));
